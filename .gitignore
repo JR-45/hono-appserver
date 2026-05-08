@@ -21,4 +21,4 @@ Thumbs.db
 *.db-journal
 
 # Logs
-*.log
+*.logsrc/generated/
