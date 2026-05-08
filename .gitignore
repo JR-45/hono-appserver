@@ -1,0 +1,24 @@
+# Abhängigkeiten
+node_modules/
+bun.lockb
+
+# Vertrauliche Daten
+.env
+.env.local
+
+# Build-Dateien
+dist/
+build/
+
+# Betriebssystem-Müll
+.DS_Store
+Thumbs.db
+
+# Prisma-spezifisch
+/prisma/migrations/
+# Falls du SQLite nutzt:
+*.db
+*.db-journal
+
+# Logs
+*.log
