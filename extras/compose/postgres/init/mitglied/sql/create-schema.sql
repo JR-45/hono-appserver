@@ -13,11 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
--- Aufruf:   psql --dbname=mitglied --username=postgres --file=/init/mitglied/sql/copy-csv.sql
+-- Aufruf:   psql --dbname=mitglied --username=mitglied --file=/init/mitglied/sql/create-schema.sql
 
-SET search_path TO mitglied;
+CREATE SCHEMA IF NOT EXISTS AUTHORIZATION mitglied;
 
--- https://www.postgresql.org/docs/current/sql-copy.html
-COPY mitglied FROM '/init/mitglied/csv/mitglied.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY ausweis FROM '/init/mitglied/csv/ausweis.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY ausleihe FROM '/init/mitglied/csv/ausleihe.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+ALTER ROLE mitglied SET search_path = 'mitglied';

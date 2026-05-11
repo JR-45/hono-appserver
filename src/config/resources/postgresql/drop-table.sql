@@ -1,4 +1,4 @@
--- Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
+-- Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -13,18 +13,16 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
--- Aufruf:
--- docker compose exec db bash
--- psql --dbname=buch --username=buch --file=/sql/drop-table.sql
+DROP INDEX IF EXISTS
+    ausweis_mitglied_id_idx,
+    ausleihe_mitglied_id_idx,
+    mitglied_nachname_idx;
 
-set search_path to 'buch';
+DROP TABLE IF EXISTS
+    ausweis,
+    ausleihe,
+    mitglied CASCADE;
 
--- https://www.postgresql.org/docs/current/sql-droptable.html
-
-DROP TABLE IF EXISTS buch_file CASCADE;
-DROP TABLE IF EXISTS abbildung CASCADE;
-DROP TABLE IF EXISTS titel CASCADE;
-DROP TABLE IF EXISTS buch CASCADE;
-
--- https://www.postgresql.org/docs/current/sql-droptype.html
-DROP TYPE IF EXISTS buchart;
+DROP TYPE IF EXISTS
+    geschlecht,
+    mitgliedsstatus;

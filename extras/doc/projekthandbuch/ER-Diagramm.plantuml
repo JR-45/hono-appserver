@@ -1,4 +1,4 @@
-' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+' Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -23,42 +23,42 @@ hide circle
 ' evtl. Prbleme mit Kraehenfuessen vermeiden
 skinparam linetype ortho
 
-entity "Buch" {
-  * id: integer <<generated>>
+entity "Mitglied" {
+  * id : integer <<generated>>
   --
   * version: integer
-  * isbn: text
-  * rating: number
-  * art: text
-  * preis: number
-  * rabatt: number
-  * lieferbar: boolean
-    datum: date
-    homepage: text
-  * **titel_id**: integer <<FK>>
-    schlagwoerter: text
+  * vorname : text
+  * nachname : text
+  * email : text <<unique>>
+    geburtsdatum: date
+    telefonnummer: text <<unique>>
+    geschlecht: Geschlecht
+    mitgliedsstatus: Mitgliedsstatus
+    interessen: JSONB
+    beitrittsdatum: date
   * erzeugt: timestamp
   * aktualisiert: timestamp
 }
 
-entity "Titel" {
-  * id: integer <<generated>>
+entity "Ausweis" {
+  * id : integer <<generated>>
   --
-  * titel: text
-    untertitel: text
+  * ausstellungsdatum : date
+  * ablaufdatum : date
+  * **mitglied_id**: integer <<FK>>
 }
 
-entity "Abbildung" {
-  * id: integer <<generated>>
+entity "Ausleihe" {
+  * id : integer <<generated>>
   --
-  * beschriftung: text
-    contentType: text
-  * **buch_id**: integer <<FK>>
+  * ausleihdatum : date
+  * rueckgabedatum : date
+  * **mitglied_id**: integer <<FK>>
 }
 
-Buch ||..|| Titel
-Buch ||..o{ Abbildung
+Mitglied ||.left.|| Ausweis
+Mitglied ||..o{ Ausleihe
 
-footer (c) Jürgen Zimmermann
+footer (c) Murat Yahsi, Jeton Rama
 
 @enduml
