@@ -80,18 +80,18 @@ Berechtigung zum Ändern vom Linux-Owner und von der Linux-Group (s.u.).
 ```
 
 Um die SQL-Skripte sowie Zertifikat und privater Schlüssel für TLS aus dem
-Original-Verzeichnis `init\buch\sql` bzw. `init\buch\tls` in das Named Volume
+Original-Verzeichnis `init\mitglied\sql` bzw. `init\mitglied\tls` in das Named Volume
 `pg_init` kopieren zu können, wurde das lokale Verzeichnis `.\init` in `/tmp/init`
 bereitgestellt. In der _bash_ werden deshalb die SQL-Skripte sowie Zertifikat und
 privater Schlüssel aus dem Verzeichnis `/tmp/init` nach `/init` und deshalb in
-das Named Volume `pg_init` kopiert. Danach wird das Verzeichnis `/tablespace/buch`
+das Named Volume `pg_init` kopiert. Danach wird das Verzeichnis `/tablespace/mitglied`
 angelegt, welches im Named Volume `pg_tablespace` liegt. Jetzt wird bei den Dateien
 der Owner und die Gruppe auf `postgres` gesetzt sowie die Zugriffsrechte auf Oktal
 `400`, d.h. nur der Owner hat Leserechte.
 
 ```shell
     cp -r /tmp/init/* /init
-    mkdir /tablespace/buch
+    mkdir /tablespace/mitglied
     chown -R postgres:postgres /init /tablespace
     chmod 400 /init/*/sql/* /init/tls/*
     ls -lR /init
@@ -136,18 +136,18 @@ jetzt mit TLS:
 ```
 
 In der 2. Shell werden die beiden SQL-Skripte ausgeführt, um zunächst eine neue
-DB `buch` mit dem DB-User `buch`anzulegen. Mit dem 2. Skript wird das Schema
-`buch` mit dem DB-User `buch` als _Owner_ angelegt. Abschließend werden die
+DB `mitglied` mit dem DB-User `mitglied`anzulegen. Mit dem 2. Skript wird das Schema
+`mitglied` mit dem DB-User `mitglied` als _Owner_ angelegt. Abschließend werden die
 Tabellen angelegt und mit Testdaten aus den CSV-Dateien aus dem Verzeichnis
-`/init/buch/csv` im Named Volume `pg_init` gefüllt.
+`/init/mitglied/csv` im Named Volume `pg_init` gefüllt.
 
 ```shell
     docker compose exec db bash
-        psql --dbname=postgres --username=postgres --file=/init/buch/sql/create-db.sql
-        psql --dbname=buch --username=buch --file=/init/buch/sql/create-schema.sql
+        psql --dbname=postgres --username=postgres --file=/init/mitglied/sql/create-db.sql
+        psql --dbname=mitglied --username=mitglied --file=/init/mitglied/sql/create-schema.sql
 
-        psql --dbname=buch --username=buch --file=/init/buch/sql/create-table.sql
-        psql --dbname=buch --username=postgres --file=/init/buch/sql/copy-csv.sql
+        psql --dbname=mitglied --username=mitglied --file=/init/mitglied/sql/create-table.sql
+        psql --dbname=mitglied --username=postgres --file=/init/mitglied/sql/copy-csv.sql
         exit
     docker compose down
 ```
@@ -256,7 +256,7 @@ Für VS Code gibt übrigens auch folgende Erweiterungen:
 
 ### Konfiguration
 
-Mit der Erweiterung _PostgreSQL_ für VS Code kann man die Datenbank `buch` und
+Mit der Erweiterung _PostgreSQL_ für VS Code kann man die Datenbank `mitglied` und
 deren Daten verwalten. Man klickt man auf _+ Verbindung hinzufügen_
 und gibt beim Karteireiter _Parameter_ folgende Werte ein:
 
@@ -278,9 +278,9 @@ gibt folgende Werte ein:
 Jetzt den modalen Dialog schließen, d.h. rechts oben auf _X_ klicken, und danach
 den Button _Verbindung testen_ anklicken. Wenn dann im Button ein Haken erscheint,
 kann man den anderen Button _Save & Connect_ anklicken, um die Verbindung zu speichern.
-Im Untermenü _Databases_ von der Verbindung sieht man dann z.B. die Datenbank `buch`
-mit dem gleichnamigen Schema `buch` und die Datenbank `postgres`.
-Ebenso kann man man unter _Roles_ den DB-User `buch` und den Superuser `postgres`
+Im Untermenü _Databases_ von der Verbindung sieht man dann z.B. die Datenbank `mitglied`
+mit dem gleichnamigen Schema `mitglied` und die Datenbank `postgres`.
+Ebenso kann man man unter _Roles_ den DB-User `mitglied` und den Superuser `postgres`
 sehen sowie bei _Tablespaces_ den Default-Tablespace `pg_default` und den
 eigenen Tablespace.
 
@@ -296,10 +296,10 @@ Danach im Chat-Fenster Fragen stellen und ggf. nachhaken, z.B.:
 
 - Wie kann ich Bücher mit einem "a" im Titel selektieren?
 - Ich möchte die Daten der Bücher und nicht den Untertitel.
-- Jetzt fehlt aber der Buchtitel.
+- Jetzt fehlt aber der Mitgliedtitel.
 - Wie kann ich diese Daten als CSV exportieren?
 
 **BEACHTE**:
 
-- _Bücher_ mit deutschem Umlaut als Plural der DB-Tabelle `buch`.
+- _Bücher_ mit deutschem Umlaut als Plural der DB-Tabelle `mitglied`.
 - Es wird auch erkannt, dass `ILIKE` anstelle von `=` benutzt werden soll.
