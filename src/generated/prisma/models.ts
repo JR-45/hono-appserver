@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Mitglied.ts'
-export type * from './models/Ausweis.ts'
 export type * from './models/Ausleihe.ts'
+export type * from './models/Ausweis.ts'
+export type * from './models/Mitglied.ts'
 export type * from './commonInputTypes.ts'

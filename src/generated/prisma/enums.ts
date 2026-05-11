@@ -20,8 +20,7 @@ export type Geschlecht = (typeof Geschlecht)[keyof typeof Geschlecht]
 
 export const Mitgliedsstatus = {
   AKTIV: 'AKTIV',
-  INAKTIV: 'INAKTIV',
-  GESPERRT: 'GESPERRT'
+  INAKTIV: 'INAKTIV'
 } as const
 
 export type Mitgliedsstatus = (typeof Mitgliedsstatus)[keyof typeof Mitgliedsstatus]

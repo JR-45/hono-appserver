@@ -18,17 +18,17 @@ export { Prisma }
 export * as $Enums from './enums.ts'
 export * from './enums.ts';
 /**
- * Model Mitglied
- * https://www.prisma.io/docs/orm/reference/prisma-schema-reference#datasource
+ * Model Ausleihe
+ * 
  */
-export type Mitglied = Prisma.MitgliedModel
+export type Ausleihe = Prisma.AusleiheModel
 /**
  * Model Ausweis
  * 
  */
 export type Ausweis = Prisma.AusweisModel
 /**
- * Model Ausleihe
+ * Model Mitglied
  * 
  */
-export type Ausleihe = Prisma.AusleiheModel
+export type Mitglied = Prisma.MitgliedModel

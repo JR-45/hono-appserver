@@ -31,8 +31,8 @@ export * from "./enums.ts"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Mitglieds
- * const mitglieds = await prisma.mitglied.findMany()
+ * // Fetch zero or more Ausleihes
+ * const ausleihes = await prisma.ausleihe.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,17 +42,17 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model Mitglied
- * https://www.prisma.io/docs/orm/reference/prisma-schema-reference#datasource
+ * Model Ausleihe
+ * 
  */
-export type Mitglied = Prisma.MitgliedModel
+export type Ausleihe = Prisma.AusleiheModel
 /**
  * Model Ausweis
  * 
  */
 export type Ausweis = Prisma.AusweisModel
 /**
- * Model Ausleihe
+ * Model Mitglied
  * 
  */
-export type Ausleihe = Prisma.AusleiheModel
+export type Mitglied = Prisma.MitgliedModel

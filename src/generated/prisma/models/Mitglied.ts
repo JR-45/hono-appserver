@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
  * Model Mitglied
- * https://www.prisma.io/docs/orm/reference/prisma-schema-reference#datasource
+ * 
  */
 export type MitgliedModel = runtime.Types.Result.DefaultSelection<Prisma.$MitgliedPayload>
 
@@ -374,7 +374,7 @@ export type MitgliedCreateInput = {
   mitgliedsstatus?: $Enums.Mitgliedsstatus | null
   beitrittsdatum?: Date | string | null
   interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  erzeugt: Date | string
+  erzeugt?: Date | string
   aktualisiert?: Date | string
   ausleihen?: Prisma.AusleiheCreateNestedManyWithoutMitgliedInput
   ausweis?: Prisma.AusweisCreateNestedOneWithoutMitgliedInput
@@ -392,7 +392,7 @@ export type MitgliedUncheckedCreateInput = {
   mitgliedsstatus?: $Enums.Mitgliedsstatus | null
   beitrittsdatum?: Date | string | null
   interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  erzeugt: Date | string
+  erzeugt?: Date | string
   aktualisiert?: Date | string
   ausleihen?: Prisma.AusleiheUncheckedCreateNestedManyWithoutMitgliedInput
   ausweis?: Prisma.AusweisUncheckedCreateNestedOneWithoutMitgliedInput
@@ -445,7 +445,7 @@ export type MitgliedCreateManyInput = {
   mitgliedsstatus?: $Enums.Mitgliedsstatus | null
   beitrittsdatum?: Date | string | null
   interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  erzeugt: Date | string
+  erzeugt?: Date | string
   aktualisiert?: Date | string
 }
 
@@ -478,6 +478,11 @@ export type MitgliedUncheckedUpdateManyInput = {
   interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   erzeugt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   aktualisiert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MitgliedScalarRelationFilter = {
+  is?: Prisma.MitgliedWhereInput
+  isNot?: Prisma.MitgliedWhereInput
 }
 
 export type MitgliedCountOrderByAggregateInput = {
@@ -536,17 +541,32 @@ export type MitgliedSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
 }
 
-export type MitgliedScalarRelationFilter = {
-  is?: Prisma.MitgliedWhereInput
-  isNot?: Prisma.MitgliedWhereInput
+export type MitgliedCreateNestedOneWithoutAusleihenInput = {
+  create?: Prisma.XOR<Prisma.MitgliedCreateWithoutAusleihenInput, Prisma.MitgliedUncheckedCreateWithoutAusleihenInput>
+  connectOrCreate?: Prisma.MitgliedCreateOrConnectWithoutAusleihenInput
+  connect?: Prisma.MitgliedWhereUniqueInput
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type MitgliedUpdateOneRequiredWithoutAusleihenNestedInput = {
+  create?: Prisma.XOR<Prisma.MitgliedCreateWithoutAusleihenInput, Prisma.MitgliedUncheckedCreateWithoutAusleihenInput>
+  connectOrCreate?: Prisma.MitgliedCreateOrConnectWithoutAusleihenInput
+  upsert?: Prisma.MitgliedUpsertWithoutAusleihenInput
+  connect?: Prisma.MitgliedWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MitgliedUpdateToOneWithWhereWithoutAusleihenInput, Prisma.MitgliedUpdateWithoutAusleihenInput>, Prisma.MitgliedUncheckedUpdateWithoutAusleihenInput>
+}
+
+export type MitgliedCreateNestedOneWithoutAusweisInput = {
+  create?: Prisma.XOR<Prisma.MitgliedCreateWithoutAusweisInput, Prisma.MitgliedUncheckedCreateWithoutAusweisInput>
+  connectOrCreate?: Prisma.MitgliedCreateOrConnectWithoutAusweisInput
+  connect?: Prisma.MitgliedWhereUniqueInput
+}
+
+export type MitgliedUpdateOneRequiredWithoutAusweisNestedInput = {
+  create?: Prisma.XOR<Prisma.MitgliedCreateWithoutAusweisInput, Prisma.MitgliedUncheckedCreateWithoutAusweisInput>
+  connectOrCreate?: Prisma.MitgliedCreateOrConnectWithoutAusweisInput
+  upsert?: Prisma.MitgliedUpsertWithoutAusweisInput
+  connect?: Prisma.MitgliedWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MitgliedUpdateToOneWithWhereWithoutAusweisInput, Prisma.MitgliedUpdateWithoutAusweisInput>, Prisma.MitgliedUncheckedUpdateWithoutAusweisInput>
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -569,120 +589,6 @@ export type NullableEnumMitgliedsstatusFieldUpdateOperationsInput = {
   set?: $Enums.Mitgliedsstatus | null
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
-export type MitgliedCreateNestedOneWithoutAusweisInput = {
-  create?: Prisma.XOR<Prisma.MitgliedCreateWithoutAusweisInput, Prisma.MitgliedUncheckedCreateWithoutAusweisInput>
-  connectOrCreate?: Prisma.MitgliedCreateOrConnectWithoutAusweisInput
-  connect?: Prisma.MitgliedWhereUniqueInput
-}
-
-export type MitgliedUpdateOneRequiredWithoutAusweisNestedInput = {
-  create?: Prisma.XOR<Prisma.MitgliedCreateWithoutAusweisInput, Prisma.MitgliedUncheckedCreateWithoutAusweisInput>
-  connectOrCreate?: Prisma.MitgliedCreateOrConnectWithoutAusweisInput
-  upsert?: Prisma.MitgliedUpsertWithoutAusweisInput
-  connect?: Prisma.MitgliedWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MitgliedUpdateToOneWithWhereWithoutAusweisInput, Prisma.MitgliedUpdateWithoutAusweisInput>, Prisma.MitgliedUncheckedUpdateWithoutAusweisInput>
-}
-
-export type MitgliedCreateNestedOneWithoutAusleihenInput = {
-  create?: Prisma.XOR<Prisma.MitgliedCreateWithoutAusleihenInput, Prisma.MitgliedUncheckedCreateWithoutAusleihenInput>
-  connectOrCreate?: Prisma.MitgliedCreateOrConnectWithoutAusleihenInput
-  connect?: Prisma.MitgliedWhereUniqueInput
-}
-
-export type MitgliedUpdateOneRequiredWithoutAusleihenNestedInput = {
-  create?: Prisma.XOR<Prisma.MitgliedCreateWithoutAusleihenInput, Prisma.MitgliedUncheckedCreateWithoutAusleihenInput>
-  connectOrCreate?: Prisma.MitgliedCreateOrConnectWithoutAusleihenInput
-  upsert?: Prisma.MitgliedUpsertWithoutAusleihenInput
-  connect?: Prisma.MitgliedWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MitgliedUpdateToOneWithWhereWithoutAusleihenInput, Prisma.MitgliedUpdateWithoutAusleihenInput>, Prisma.MitgliedUncheckedUpdateWithoutAusleihenInput>
-}
-
-export type MitgliedCreateWithoutAusweisInput = {
-  version?: number
-  vorname: string
-  nachname: string
-  email: string
-  geburtsdatum?: Date | string | null
-  telefonnummer?: string | null
-  geschlecht?: $Enums.Geschlecht | null
-  mitgliedsstatus?: $Enums.Mitgliedsstatus | null
-  beitrittsdatum?: Date | string | null
-  interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  erzeugt: Date | string
-  aktualisiert?: Date | string
-  ausleihen?: Prisma.AusleiheCreateNestedManyWithoutMitgliedInput
-}
-
-export type MitgliedUncheckedCreateWithoutAusweisInput = {
-  id?: number
-  version?: number
-  vorname: string
-  nachname: string
-  email: string
-  geburtsdatum?: Date | string | null
-  telefonnummer?: string | null
-  geschlecht?: $Enums.Geschlecht | null
-  mitgliedsstatus?: $Enums.Mitgliedsstatus | null
-  beitrittsdatum?: Date | string | null
-  interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  erzeugt: Date | string
-  aktualisiert?: Date | string
-  ausleihen?: Prisma.AusleiheUncheckedCreateNestedManyWithoutMitgliedInput
-}
-
-export type MitgliedCreateOrConnectWithoutAusweisInput = {
-  where: Prisma.MitgliedWhereUniqueInput
-  create: Prisma.XOR<Prisma.MitgliedCreateWithoutAusweisInput, Prisma.MitgliedUncheckedCreateWithoutAusweisInput>
-}
-
-export type MitgliedUpsertWithoutAusweisInput = {
-  update: Prisma.XOR<Prisma.MitgliedUpdateWithoutAusweisInput, Prisma.MitgliedUncheckedUpdateWithoutAusweisInput>
-  create: Prisma.XOR<Prisma.MitgliedCreateWithoutAusweisInput, Prisma.MitgliedUncheckedCreateWithoutAusweisInput>
-  where?: Prisma.MitgliedWhereInput
-}
-
-export type MitgliedUpdateToOneWithWhereWithoutAusweisInput = {
-  where?: Prisma.MitgliedWhereInput
-  data: Prisma.XOR<Prisma.MitgliedUpdateWithoutAusweisInput, Prisma.MitgliedUncheckedUpdateWithoutAusweisInput>
-}
-
-export type MitgliedUpdateWithoutAusweisInput = {
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  vorname?: Prisma.StringFieldUpdateOperationsInput | string
-  nachname?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  geburtsdatum?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  telefonnummer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  geschlecht?: Prisma.NullableEnumGeschlechtFieldUpdateOperationsInput | $Enums.Geschlecht | null
-  mitgliedsstatus?: Prisma.NullableEnumMitgliedsstatusFieldUpdateOperationsInput | $Enums.Mitgliedsstatus | null
-  beitrittsdatum?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  erzeugt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  aktualisiert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ausleihen?: Prisma.AusleiheUpdateManyWithoutMitgliedNestedInput
-}
-
-export type MitgliedUncheckedUpdateWithoutAusweisInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  vorname?: Prisma.StringFieldUpdateOperationsInput | string
-  nachname?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  geburtsdatum?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  telefonnummer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  geschlecht?: Prisma.NullableEnumGeschlechtFieldUpdateOperationsInput | $Enums.Geschlecht | null
-  mitgliedsstatus?: Prisma.NullableEnumMitgliedsstatusFieldUpdateOperationsInput | $Enums.Mitgliedsstatus | null
-  beitrittsdatum?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  erzeugt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  aktualisiert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ausleihen?: Prisma.AusleiheUncheckedUpdateManyWithoutMitgliedNestedInput
-}
-
 export type MitgliedCreateWithoutAusleihenInput = {
   version?: number
   vorname: string
@@ -694,7 +600,7 @@ export type MitgliedCreateWithoutAusleihenInput = {
   mitgliedsstatus?: $Enums.Mitgliedsstatus | null
   beitrittsdatum?: Date | string | null
   interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  erzeugt: Date | string
+  erzeugt?: Date | string
   aktualisiert?: Date | string
   ausweis?: Prisma.AusweisCreateNestedOneWithoutMitgliedInput
 }
@@ -711,7 +617,7 @@ export type MitgliedUncheckedCreateWithoutAusleihenInput = {
   mitgliedsstatus?: $Enums.Mitgliedsstatus | null
   beitrittsdatum?: Date | string | null
   interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  erzeugt: Date | string
+  erzeugt?: Date | string
   aktualisiert?: Date | string
   ausweis?: Prisma.AusweisUncheckedCreateNestedOneWithoutMitgliedInput
 }
@@ -763,6 +669,88 @@ export type MitgliedUncheckedUpdateWithoutAusleihenInput = {
   erzeugt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   aktualisiert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ausweis?: Prisma.AusweisUncheckedUpdateOneWithoutMitgliedNestedInput
+}
+
+export type MitgliedCreateWithoutAusweisInput = {
+  version?: number
+  vorname: string
+  nachname: string
+  email: string
+  geburtsdatum?: Date | string | null
+  telefonnummer?: string | null
+  geschlecht?: $Enums.Geschlecht | null
+  mitgliedsstatus?: $Enums.Mitgliedsstatus | null
+  beitrittsdatum?: Date | string | null
+  interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  erzeugt?: Date | string
+  aktualisiert?: Date | string
+  ausleihen?: Prisma.AusleiheCreateNestedManyWithoutMitgliedInput
+}
+
+export type MitgliedUncheckedCreateWithoutAusweisInput = {
+  id?: number
+  version?: number
+  vorname: string
+  nachname: string
+  email: string
+  geburtsdatum?: Date | string | null
+  telefonnummer?: string | null
+  geschlecht?: $Enums.Geschlecht | null
+  mitgliedsstatus?: $Enums.Mitgliedsstatus | null
+  beitrittsdatum?: Date | string | null
+  interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  erzeugt?: Date | string
+  aktualisiert?: Date | string
+  ausleihen?: Prisma.AusleiheUncheckedCreateNestedManyWithoutMitgliedInput
+}
+
+export type MitgliedCreateOrConnectWithoutAusweisInput = {
+  where: Prisma.MitgliedWhereUniqueInput
+  create: Prisma.XOR<Prisma.MitgliedCreateWithoutAusweisInput, Prisma.MitgliedUncheckedCreateWithoutAusweisInput>
+}
+
+export type MitgliedUpsertWithoutAusweisInput = {
+  update: Prisma.XOR<Prisma.MitgliedUpdateWithoutAusweisInput, Prisma.MitgliedUncheckedUpdateWithoutAusweisInput>
+  create: Prisma.XOR<Prisma.MitgliedCreateWithoutAusweisInput, Prisma.MitgliedUncheckedCreateWithoutAusweisInput>
+  where?: Prisma.MitgliedWhereInput
+}
+
+export type MitgliedUpdateToOneWithWhereWithoutAusweisInput = {
+  where?: Prisma.MitgliedWhereInput
+  data: Prisma.XOR<Prisma.MitgliedUpdateWithoutAusweisInput, Prisma.MitgliedUncheckedUpdateWithoutAusweisInput>
+}
+
+export type MitgliedUpdateWithoutAusweisInput = {
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  vorname?: Prisma.StringFieldUpdateOperationsInput | string
+  nachname?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  geburtsdatum?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telefonnummer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  geschlecht?: Prisma.NullableEnumGeschlechtFieldUpdateOperationsInput | $Enums.Geschlecht | null
+  mitgliedsstatus?: Prisma.NullableEnumMitgliedsstatusFieldUpdateOperationsInput | $Enums.Mitgliedsstatus | null
+  beitrittsdatum?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  erzeugt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aktualisiert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ausleihen?: Prisma.AusleiheUpdateManyWithoutMitgliedNestedInput
+}
+
+export type MitgliedUncheckedUpdateWithoutAusweisInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  vorname?: Prisma.StringFieldUpdateOperationsInput | string
+  nachname?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  geburtsdatum?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telefonnummer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  geschlecht?: Prisma.NullableEnumGeschlechtFieldUpdateOperationsInput | $Enums.Geschlecht | null
+  mitgliedsstatus?: Prisma.NullableEnumMitgliedsstatusFieldUpdateOperationsInput | $Enums.Mitgliedsstatus | null
+  beitrittsdatum?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  interessen?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  erzeugt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aktualisiert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ausleihen?: Prisma.AusleiheUncheckedUpdateManyWithoutMitgliedNestedInput
 }
 
 
@@ -884,22 +872,13 @@ export type $MitgliedPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     vorname: string
     nachname: string
     email: string
-    /**
-     * https://www.prisma.io/docs/orm/reference/prisma-schema-reference#date
-     */
     geburtsdatum: Date | null
     telefonnummer: string | null
     geschlecht: $Enums.Geschlecht | null
     mitgliedsstatus: $Enums.Mitgliedsstatus | null
     beitrittsdatum: Date | null
-    /**
-     * https://www.prisma.io/docs/orm/reference/prisma-schema-reference#json
-     */
     interessen: runtime.JsonValue | null
     erzeugt: Date
-    /**
-     * https://www.prisma.io/docs/orm/reference/prisma-schema-reference#updatedat
-     */
     aktualisiert: Date
   }, ExtArgs["result"]["mitglied"]>
   composites: {}

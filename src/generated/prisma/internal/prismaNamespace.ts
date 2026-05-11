@@ -384,9 +384,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  Mitglied: 'Mitglied',
+  Ausleihe: 'Ausleihe',
   Ausweis: 'Ausweis',
-  Ausleihe: 'Ausleihe'
+  Mitglied: 'Mitglied'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,81 +402,81 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "mitglied" | "ausweis" | "ausleihe"
+    modelProps: "ausleihe" | "ausweis" | "mitglied"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
-    Mitglied: {
-      payload: Prisma.$MitgliedPayload<ExtArgs>
-      fields: Prisma.MitgliedFieldRefs
+    Ausleihe: {
+      payload: Prisma.$AusleihePayload<ExtArgs>
+      fields: Prisma.AusleiheFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.MitgliedFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload> | null
+          args: Prisma.AusleiheFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.MitgliedFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
+          args: Prisma.AusleiheFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
         }
         findFirst: {
-          args: Prisma.MitgliedFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload> | null
+          args: Prisma.AusleiheFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.MitgliedFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
+          args: Prisma.AusleiheFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
         }
         findMany: {
-          args: Prisma.MitgliedFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>[]
+          args: Prisma.AusleiheFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>[]
         }
         create: {
-          args: Prisma.MitgliedCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
+          args: Prisma.AusleiheCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
         }
         createMany: {
-          args: Prisma.MitgliedCreateManyArgs<ExtArgs>
+          args: Prisma.AusleiheCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.MitgliedCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>[]
+          args: Prisma.AusleiheCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>[]
         }
         delete: {
-          args: Prisma.MitgliedDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
+          args: Prisma.AusleiheDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
         }
         update: {
-          args: Prisma.MitgliedUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
+          args: Prisma.AusleiheUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
         }
         deleteMany: {
-          args: Prisma.MitgliedDeleteManyArgs<ExtArgs>
+          args: Prisma.AusleiheDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.MitgliedUpdateManyArgs<ExtArgs>
+          args: Prisma.AusleiheUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.MitgliedUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>[]
+          args: Prisma.AusleiheUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>[]
         }
         upsert: {
-          args: Prisma.MitgliedUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
+          args: Prisma.AusleiheUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
         }
         aggregate: {
-          args: Prisma.MitgliedAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateMitglied>
+          args: Prisma.AusleiheAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAusleihe>
         }
         groupBy: {
-          args: Prisma.MitgliedGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.MitgliedGroupByOutputType>[]
+          args: Prisma.AusleiheGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AusleiheGroupByOutputType>[]
         }
         count: {
-          args: Prisma.MitgliedCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.MitgliedCountAggregateOutputType> | number
+          args: Prisma.AusleiheCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AusleiheCountAggregateOutputType> | number
         }
       }
     }
@@ -554,77 +554,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Ausleihe: {
-      payload: Prisma.$AusleihePayload<ExtArgs>
-      fields: Prisma.AusleiheFieldRefs
+    Mitglied: {
+      payload: Prisma.$MitgliedPayload<ExtArgs>
+      fields: Prisma.MitgliedFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.AusleiheFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload> | null
+          args: Prisma.MitgliedFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.AusleiheFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
+          args: Prisma.MitgliedFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
         }
         findFirst: {
-          args: Prisma.AusleiheFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload> | null
+          args: Prisma.MitgliedFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.AusleiheFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
+          args: Prisma.MitgliedFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
         }
         findMany: {
-          args: Prisma.AusleiheFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>[]
+          args: Prisma.MitgliedFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>[]
         }
         create: {
-          args: Prisma.AusleiheCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
+          args: Prisma.MitgliedCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
         }
         createMany: {
-          args: Prisma.AusleiheCreateManyArgs<ExtArgs>
+          args: Prisma.MitgliedCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.AusleiheCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>[]
+          args: Prisma.MitgliedCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>[]
         }
         delete: {
-          args: Prisma.AusleiheDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
+          args: Prisma.MitgliedDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
         }
         update: {
-          args: Prisma.AusleiheUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
+          args: Prisma.MitgliedUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
         }
         deleteMany: {
-          args: Prisma.AusleiheDeleteManyArgs<ExtArgs>
+          args: Prisma.MitgliedDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.AusleiheUpdateManyArgs<ExtArgs>
+          args: Prisma.MitgliedUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.AusleiheUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>[]
+          args: Prisma.MitgliedUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>[]
         }
         upsert: {
-          args: Prisma.AusleiheUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AusleihePayload>
+          args: Prisma.MitgliedUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MitgliedPayload>
         }
         aggregate: {
-          args: Prisma.AusleiheAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAusleihe>
+          args: Prisma.MitgliedAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMitglied>
         }
         groupBy: {
-          args: Prisma.AusleiheGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AusleiheGroupByOutputType>[]
+          args: Prisma.MitgliedGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MitgliedGroupByOutputType>[]
         }
         count: {
-          args: Prisma.AusleiheCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AusleiheCountAggregateOutputType> | number
+          args: Prisma.MitgliedCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MitgliedCountAggregateOutputType> | number
         }
       }
     }
@@ -667,23 +667,14 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const MitgliedScalarFieldEnum = {
+export const AusleiheScalarFieldEnum = {
   id: 'id',
-  version: 'version',
-  vorname: 'vorname',
-  nachname: 'nachname',
-  email: 'email',
-  geburtsdatum: 'geburtsdatum',
-  telefonnummer: 'telefonnummer',
-  geschlecht: 'geschlecht',
-  mitgliedsstatus: 'mitgliedsstatus',
-  beitrittsdatum: 'beitrittsdatum',
-  interessen: 'interessen',
-  erzeugt: 'erzeugt',
-  aktualisiert: 'aktualisiert'
+  ausleihdatum: 'ausleihdatum',
+  rueckgabedatum: 'rueckgabedatum',
+  mitgliedId: 'mitgliedId'
 } as const
 
-export type MitgliedScalarFieldEnum = (typeof MitgliedScalarFieldEnum)[keyof typeof MitgliedScalarFieldEnum]
+export type AusleiheScalarFieldEnum = (typeof AusleiheScalarFieldEnum)[keyof typeof AusleiheScalarFieldEnum]
 
 
 export const RelationLoadStrategy = {
@@ -704,14 +695,23 @@ export const AusweisScalarFieldEnum = {
 export type AusweisScalarFieldEnum = (typeof AusweisScalarFieldEnum)[keyof typeof AusweisScalarFieldEnum]
 
 
-export const AusleiheScalarFieldEnum = {
+export const MitgliedScalarFieldEnum = {
   id: 'id',
-  ausleihdatum: 'ausleihdatum',
-  rueckgabedatum: 'rueckgabedatum',
-  mitgliedId: 'mitgliedId'
+  version: 'version',
+  vorname: 'vorname',
+  nachname: 'nachname',
+  email: 'email',
+  geburtsdatum: 'geburtsdatum',
+  telefonnummer: 'telefonnummer',
+  geschlecht: 'geschlecht',
+  mitgliedsstatus: 'mitgliedsstatus',
+  beitrittsdatum: 'beitrittsdatum',
+  interessen: 'interessen',
+  erzeugt: 'erzeugt',
+  aktualisiert: 'aktualisiert'
 } as const
 
-export type AusleiheScalarFieldEnum = (typeof AusleiheScalarFieldEnum)[keyof typeof AusleiheScalarFieldEnum]
+export type MitgliedScalarFieldEnum = (typeof MitgliedScalarFieldEnum)[keyof typeof MitgliedScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -776,20 +776,6 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'String'
- */
-export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
-    
-
-
-/**
- * Reference to a field of type 'String[]'
- */
-export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -800,6 +786,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'String'
+ */
+export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+    
+
+
+/**
+ * Reference to a field of type 'String[]'
+ */
+export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
     
 
 
@@ -968,9 +968,9 @@ export type PrismaClientOptions = ({
   queryPlanCacheMaxSize?: number
 }
 export type GlobalOmitConfig = {
-  mitglied?: Prisma.MitgliedOmit
-  ausweis?: Prisma.AusweisOmit
   ausleihe?: Prisma.AusleiheOmit
+  ausweis?: Prisma.AusweisOmit
+  mitglied?: Prisma.MitgliedOmit
 }
 
 /* Types for Logging */

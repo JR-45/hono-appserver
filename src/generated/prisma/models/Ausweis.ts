@@ -301,11 +301,6 @@ export type AusweisUncheckedUpdateManyInput = {
   mitgliedId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type AusweisNullableScalarRelationFilter = {
-  is?: Prisma.AusweisWhereInput | null
-  isNot?: Prisma.AusweisWhereInput | null
-}
-
 export type AusweisCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ausstellungsdatum?: Prisma.SortOrder
@@ -335,6 +330,11 @@ export type AusweisMinOrderByAggregateInput = {
 export type AusweisSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   mitgliedId?: Prisma.SortOrder
+}
+
+export type AusweisNullableScalarRelationFilter = {
+  is?: Prisma.AusweisWhereInput | null
+  isNot?: Prisma.AusweisWhereInput | null
 }
 
 export type AusweisCreateNestedOneWithoutMitgliedInput = {
@@ -454,9 +454,6 @@ export type AusweisIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $AusweisPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Ausweis"
   objects: {
-    /**
-     * https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/referential-actions#referential-action-defaults
-     */
     mitglied: Prisma.$MitgliedPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{

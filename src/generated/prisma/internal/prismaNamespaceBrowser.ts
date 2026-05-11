@@ -51,9 +51,9 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Mitglied: 'Mitglied',
+  Ausleihe: 'Ausleihe',
   Ausweis: 'Ausweis',
-  Ausleihe: 'Ausleihe'
+  Mitglied: 'Mitglied'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -72,23 +72,14 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const MitgliedScalarFieldEnum = {
+export const AusleiheScalarFieldEnum = {
   id: 'id',
-  version: 'version',
-  vorname: 'vorname',
-  nachname: 'nachname',
-  email: 'email',
-  geburtsdatum: 'geburtsdatum',
-  telefonnummer: 'telefonnummer',
-  geschlecht: 'geschlecht',
-  mitgliedsstatus: 'mitgliedsstatus',
-  beitrittsdatum: 'beitrittsdatum',
-  interessen: 'interessen',
-  erzeugt: 'erzeugt',
-  aktualisiert: 'aktualisiert'
+  ausleihdatum: 'ausleihdatum',
+  rueckgabedatum: 'rueckgabedatum',
+  mitgliedId: 'mitgliedId'
 } as const
 
-export type MitgliedScalarFieldEnum = (typeof MitgliedScalarFieldEnum)[keyof typeof MitgliedScalarFieldEnum]
+export type AusleiheScalarFieldEnum = (typeof AusleiheScalarFieldEnum)[keyof typeof AusleiheScalarFieldEnum]
 
 
 export const RelationLoadStrategy = {
@@ -109,14 +100,23 @@ export const AusweisScalarFieldEnum = {
 export type AusweisScalarFieldEnum = (typeof AusweisScalarFieldEnum)[keyof typeof AusweisScalarFieldEnum]
 
 
-export const AusleiheScalarFieldEnum = {
+export const MitgliedScalarFieldEnum = {
   id: 'id',
-  ausleihdatum: 'ausleihdatum',
-  rueckgabedatum: 'rueckgabedatum',
-  mitgliedId: 'mitgliedId'
+  version: 'version',
+  vorname: 'vorname',
+  nachname: 'nachname',
+  email: 'email',
+  geburtsdatum: 'geburtsdatum',
+  telefonnummer: 'telefonnummer',
+  geschlecht: 'geschlecht',
+  mitgliedsstatus: 'mitgliedsstatus',
+  beitrittsdatum: 'beitrittsdatum',
+  interessen: 'interessen',
+  erzeugt: 'erzeugt',
+  aktualisiert: 'aktualisiert'
 } as const
 
-export type AusleiheScalarFieldEnum = (typeof AusleiheScalarFieldEnum)[keyof typeof AusleiheScalarFieldEnum]
+export type MitgliedScalarFieldEnum = (typeof MitgliedScalarFieldEnum)[keyof typeof MitgliedScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -301,16 +301,6 @@ export type AusleiheUncheckedUpdateManyInput = {
   mitgliedId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type AusleiheListRelationFilter = {
-  every?: Prisma.AusleiheWhereInput
-  some?: Prisma.AusleiheWhereInput
-  none?: Prisma.AusleiheWhereInput
-}
-
-export type AusleiheOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type AusleiheCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ausleihdatum?: Prisma.SortOrder
@@ -340,6 +330,28 @@ export type AusleiheMinOrderByAggregateInput = {
 export type AusleiheSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   mitgliedId?: Prisma.SortOrder
+}
+
+export type AusleiheListRelationFilter = {
+  every?: Prisma.AusleiheWhereInput
+  some?: Prisma.AusleiheWhereInput
+  none?: Prisma.AusleiheWhereInput
+}
+
+export type AusleiheOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type AusleiheCreateNestedManyWithoutMitgliedInput = {
@@ -501,9 +513,6 @@ export type AusleiheIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $AusleihePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Ausleihe"
   objects: {
-    /**
-     * https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/referential-actions#referential-action-defaults
-     */
     mitglied: Prisma.$MitgliedPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
