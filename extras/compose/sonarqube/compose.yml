@@ -1,0 +1,37 @@
+# Copyright (C) 2026 - present Jeton Rama, Hochschule Karlsruhe
+services:
+  sonarqube:
+    image: sonarqube:26.4.0.121862-community
+    ports:
+      - published: 9000
+        target: 9000
+      - published: 9092
+        target: 9092
+    volumes:
+      - sonarqube-data:/opt/sonarqube/data
+      - sonarqube-logs:/opt/sonarqube/logs
+      - sonarqube-extensions:/opt/sonarqube/lib/extensions
+    environment:
+      TZ: Europe/Berlin
+    networks: [sonar-network]
+    hostname: sonarqube
+    container_name: sonarqube
+    cap_drop: [ALL]
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+        reservations:
+          cpus: "2.0"
+          memory: 2G
+
+volumes:
+  sonarqube-data:
+  sonarqube-logs:
+  sonarqube-extensions:
+
+networks:
+  sonar-network:
+    name: sonar-network
