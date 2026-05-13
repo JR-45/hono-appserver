@@ -45,6 +45,10 @@ jobs:
       - name: Lint
         run: bun run eslint
 
+      # TODO: Tests aktivieren sobald Phase 7 abgeschlossen ist
+      #- name: Test
+      #  run: bun vitest --run
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
