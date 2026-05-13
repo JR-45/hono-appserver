@@ -29,6 +29,7 @@
     "@prisma/adapter-pg": "7.8.0",
     "@prisma/client": "7.8.0",
     "@prisma/sqlcommenter-query-insights": "7.8.0",
+    "axios": "1.16.0",
     "dotenv": "17.4.2",
     "hono": "4.12.14",
     "pg": "8.20.0"
