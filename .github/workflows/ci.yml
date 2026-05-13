@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: mitglied
+          POSTGRES_PASSWORD: p
+          POSTGRES_DB: mitglied
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install
+
+      - name: Prisma Generate
+        run: bun --env-file=.env prisma generate
+        env:
+          DATABASE_URL: postgresql://mitglied:p@localhost:5432/mitglied?schema=mitglied
+
+      - name: Lint
+        run: bun run eslint
+
+      - name: Test
+        run: bun vitest --run
+        env:
+          DATABASE_URL: postgresql://mitglied:p@localhost:5432/mitglied?schema=mitglied
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
