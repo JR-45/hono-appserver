@@ -18,13 +18,15 @@ import { type ContentfulStatusCode } from 'hono/utils/http-status';
 
 export const badRequest = 400 as const;
 export const unauthorized = 401 as const;
+export const forbidden = 403 as const;
 export const preconditionFailed = 412 as const;
 export const preconditionRequired = 428 as const;
+export const unprocessableContent = 422 as const;
 
 export const createProblemDetails = (
     c: Context,
     status: number,
-    detail: string,
+    detail: unknown,
 ) => {
     return c.json(
         {
