@@ -28,3 +28,6 @@ src/generated/
 *.js.map
 beispiele
 beispiele-write
+
+# Claude Code
+.claude/
