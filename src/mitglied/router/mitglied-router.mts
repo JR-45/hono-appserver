@@ -37,92 +37,87 @@ const logger = getLogger('mitglied-router', 'file');
 // S u c h e   m i t   P f a d - P a r a m e t e r
 // -----------------------------------------------------------------------------
 router.get('/:id', async (c) => {
-    const { req } = c;
-    const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
-    if (accept !== '*/*' && !/(json|html)/u.test(accept)) {
-        logger.debug('get: Accept=%s', accept);
-        return c.body(null, 406);
-    }
+  const { req } = c;
+  const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
+  if (accept !== '*/*' && !/(json|html)/u.test(accept)) {
+    logger.debug('get: Accept=%s', accept);
+    return c.body(null, 406);
+  }
 
-    const id = req.param('id');
-    logger.debug('get: id=%s', id);
-    const idNumber = Number.parseInt(id, 10);
-    if (Number.isNaN(idNumber)) {
-        return c.notFound();
-    }
+  const id = req.param('id');
+  logger.debug('get: id=%s', id);
+  const idNumber = Number.parseInt(id, 10);
+  if (Number.isNaN(idNumber)) {
+    return c.notFound();
+  }
 
-    const mitglied = await mitgliedService.findById({ id: idNumber });
+  const mitglied = await mitgliedService.findById({ id: idNumber });
 
-    // ETags
-    const ifNonMatch = req.header('If-None-Match');
-    const { version } = mitglied;
-    if (ifNonMatch === `"${version}"`) {
-        logger.debug('get: Not Modified');
-        return c.body(null, 304);
-    }
+  // ETags
+  const ifNonMatch = req.header('If-None-Match');
+  const { version } = mitglied;
+  if (ifNonMatch === `"${version}"`) {
+    logger.debug('get: Not Modified');
+    return c.body(null, 304);
+  }
 
-    logger.debug('get: version=%d', version);
-    const { header, json } = c;
-    header('ETag', `"${version}"`);
+  logger.debug('get: version=%d', version);
+  const { header, json } = c;
+  header('ETag', `"${version}"`);
 
-    logger.debug('get: %o', mitglied);
-    return json(mitglied);
+  logger.debug('get: %o', mitglied);
+  return json(mitglied);
 });
 
 // -----------------------------------------------------------------------------
 // S u c h e   m i t   Q u e r y - P a r a m e t e r
 // -----------------------------------------------------------------------------
 router.get('/', async (c) => {
-    const { req } = c;
-    const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
-    if (accept !== '*/*' && !/(json|html)/u.test(accept)) {
-        logger.debug('get: Accept=%s', accept);
-        return c.body(null, 406);
-    }
+  const { req } = c;
+  const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
+  if (accept !== '*/*' && !/(json|html)/u.test(accept)) {
+    logger.debug('get: Accept=%s', accept);
+    return c.body(null, 406);
+  }
 
-    const queryParams = req.query();
-    logger.debug('get: queryParams=%o', queryParams);
-    const countOnly = queryParams['count-only'];
-    if (typeof countOnly !== 'undefined') {
-        const count = await mitgliedService.count();
-        logger.debug('get: count=%d', count);
-        return c.json({ count });
-    }
+  const queryParams = req.query();
+  logger.debug('get: queryParams=%o', queryParams);
+  const countOnly = queryParams['count-only'];
+  if (typeof countOnly !== 'undefined') {
+    const count = await mitgliedService.count();
+    logger.debug('get: count=%d', count);
+    return c.json({ count });
+  }
 
-    const { page, size } = queryParams;
-    delete queryParams['page'];
-    delete queryParams['size'];
-    logger.debug(
-        'get: page=%s, size=%s, queryParams=%o',
-        page,
-        size,
-        queryParams,
-    );
+  const { page, size } = queryParams;
+  delete queryParams['page'];
+  delete queryParams['size'];
+  logger.debug('get: page=%s, size=%s, queryParams=%o', page, size, queryParams);
 
-    const pageable = createPageable({ number: page, size });
-    const mitgliederSlice = await mitgliedService.find(queryParams, pageable);
-    const mitgliedPage = createPage(mitgliederSlice, pageable);
-    logger.debug('get: mitgliedPage=%o', mitgliedPage);
-    return c.json(mitgliedPage);
+  const pageable = createPageable({ number: page, size });
+  const mitgliederSlice = await mitgliedService.find(queryParams, pageable);
+  const mitgliedPage = createPage(mitgliederSlice, pageable);
+  logger.debug('get: mitgliedPage=%o', mitgliedPage);
+  return c.json(mitgliedPage);
 });
 
 // -----------------------------------------------------------------------------
 // D o w n l o a d
 // -----------------------------------------------------------------------------
 router.get('/file/:id', async (c) => {
-    const id = c.req.param('id');
-    logger.debug('download: id=%s', id);
-    const idNumber = Number.parseInt(id, 10);
-    if (Number.isNaN(idNumber)) {
-        return c.notFound();
-    }
+  const id = c.req.param('id');
+  logger.debug('download: id=%s', id);
+  const idNumber = Number.parseInt(id, 10);
+  if (Number.isNaN(idNumber)) {
+    return c.notFound();
+  }
 
-    const mitgliedFile = await mitgliedService.findFileByMitgliedId(idNumber);
-    if (typeof mitgliedFile === 'undefined') {
-        return c.notFound();
-    }
+  const mitgliedFile = await mitgliedService.findFileByMitgliedId(idNumber);
+  if (typeof mitgliedFile === 'undefined') {
+    return c.notFound();
+  }
 
-    return c.body(mitgliedFile.data, {
-        headers: { 'Content-Type': mitgliedFile.mimetype ?? '' },
-    });
+  return c.body(mitgliedFile.data, {
+    headers: { 'Content-Type': mitgliedFile.mimetype ?? '' },
+  });
 });

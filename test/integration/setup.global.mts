@@ -20,24 +20,24 @@ import { AUTHORIZATION, BEARER, baseURL } from './constants.mjs';
 import { getToken } from './token.mjs';
 
 const dbPopulate = async (token: string) => {
-    const url = `${baseURL}/dev/db_populate`;
+  const url = `${baseURL}/dev/db_populate`;
 
-    const response = await axios.post(url, undefined, {
-        headers: {
-            [AUTHORIZATION]: `${BEARER} ${token}`,
-        },
-    });
+  const response = await axios.post(url, undefined, {
+    headers: {
+      [AUTHORIZATION]: `${BEARER} ${token}`,
+    },
+  });
 
-    if (response.data.db_populate !== 'ok') {
-        throw new Error('Fehler bei POST /dev/db_populate');
-    }
-    console.log('DB wurde neu geladen');
+  if (response.data.db_populate !== 'ok') {
+    throw new Error('Fehler bei POST /dev/db_populate');
+  }
+  console.log('DB wurde neu geladen');
 };
 
 // https://vitest.dev/config/\#globalsetup
 // oxlint-disable-next-line import/no-default-export
 export default async function setup() {
-    const token = await getToken('admin', 'p');
-    console.log(`setup: token=${token}`);
-    await dbPopulate(token);
+  const token = await getToken('admin', 'p');
+  console.log(`setup: token=${token}`);
+  await dbPopulate(token);
 }

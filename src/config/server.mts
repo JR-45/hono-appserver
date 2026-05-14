@@ -35,10 +35,10 @@ const { NODE_ENV } = env;
 const computername = hostname();
 const { server } = config;
 if (
-    typeof server === 'object' &&
-    (typeof server.port !== 'number' || typeof server.portHttp !== 'number')
+  typeof server === 'object' &&
+  (typeof server.port !== 'number' || typeof server.portHttp !== 'number')
 ) {
-    throw new TypeError('Ein konfigurierter Port ist keine Zahl');
+  throw new TypeError('Ein konfigurierter Port ist keine Zahl');
 }
 // "Optional Chaining" und "Nullish Coalescing" ab ES2020
 const port = (server?.port as number | undefined) ?? 3000; // oxlint-disable-line no-magic-numbers
@@ -53,15 +53,10 @@ logger.debug('tlsURL = %s', tlsURL);
 // public/private keys und Zertifikat fuer TLS
 const key = await readFile(new URL('key.pem', tlsURL), { encoding: 'utf8' });
 const cert = await readFile(new URL('certificate.crt', tlsURL), {
-    encoding: 'utf8',
+  encoding: 'utf8',
 });
 
-export type NodeEnv =
-    | 'development'
-    | 'PRODUCTION'
-    | 'production'
-    | 'test'
-    | undefined;
+export type NodeEnv = 'development' | 'PRODUCTION' | 'production' | 'test' | undefined;
 /**
  * Die Konfiguration für den _Node_-basierten Server:
  * - Rechnername
@@ -73,19 +68,19 @@ export type NodeEnv =
 // "as const" fuer readonly
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions
 type ServerConfig = {
-    host: string;
-    port: number;
-    portHttp: number;
-    key: string;
-    cert: string;
-    nodeEnv: NodeEnv;
+  host: string;
+  port: number;
+  portHttp: number;
+  key: string;
+  cert: string;
+  nodeEnv: NodeEnv;
 };
 export const serverConfig: ServerConfig = {
-    host: computername,
-    // Shorthand Property ab ES 2015
-    port,
-    portHttp,
-    key,
-    cert,
-    nodeEnv: NODE_ENV as NodeEnv,
+  host: computername,
+  // Shorthand Property ab ES 2015
+  port,
+  portHttp,
+  key,
+  cert,
+  nodeEnv: NODE_ENV as NodeEnv,
 } as const;

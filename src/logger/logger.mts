@@ -32,13 +32,13 @@ import type pino from 'pino';
  *
  * @author [Murat Yahsi](mailto:yamu1012@h-ka.de)
  */
-export const getLogger: (
-    context: string,
-    kind?: string,
-) => pino.Logger<string> = (context: string, kind = 'class') => {
-    const bindings: Record<string, string> = {};
-    // "indexed access" auf eine Property, deren Name als Wert im Argument "kind" uebergeben wird
-    bindings[kind] = context;
-    // https://getpino.io/#/docs/child-loggers
-    return parentLogger.child(bindings);
+export const getLogger: (context: string, kind?: string) => pino.Logger<string> = (
+  context: string,
+  kind = 'class',
+) => {
+  const bindings: Record<string, string> = {};
+  // "indexed access" auf eine Property, deren Name als Wert im Argument "kind" uebergeben wird
+  bindings[kind] = context;
+  // https://getpino.io/#/docs/child-loggers
+  return parentLogger.child(bindings);
 };

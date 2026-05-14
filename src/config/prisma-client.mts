@@ -31,41 +31,41 @@ const logger = getLogger('prisma-client', 'file');
 // PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env"
 // d.h. mit PostgreSQL-User "buch" und Schema "buch"
 export const adapter = new PrismaPg({
-    connectionString: process.env['DATABASE_URL'],
+  connectionString: process.env['DATABASE_URL'],
 });
 
 let tmpClient: PrismaClient;
 
 if (logger.isLevelEnabled('debug')) {
-    const debugClient = new PrismaClient({
-        adapter,
-        errorFormat: 'pretty',
-        log: [
-            {
-                // siehe unten: debugClient.$on('query', ...);
-                emit: 'event',
-                level: 'query',
-            },
-            'info',
-            'warn',
-            'error',
-        ],
-        // Kommentar zu Log-Ausgabe generieren:
-        // /*prismaQuery='Buch.findMany%3A... mit base64-Codierung
-        // https://www.prisma.io/docs/orm/reference/prisma-client-reference#comments
-        comments: [prismaQueryInsights()],
-    });
+  const debugClient = new PrismaClient({
+    adapter,
+    errorFormat: 'pretty',
+    log: [
+      {
+        // siehe unten: debugClient.$on('query', ...);
+        emit: 'event',
+        level: 'query',
+      },
+      'info',
+      'warn',
+      'error',
+    ],
+    // Kommentar zu Log-Ausgabe generieren:
+    // /*prismaQuery='Buch.findMany%3A... mit base64-Codierung
+    // https://www.prisma.io/docs/orm/reference/prisma-client-reference#comments
+    comments: [prismaQueryInsights()],
+  });
 
-    debugClient.$on('query', (event) => {
-        // console.log(), weil der Pino-Logger asynchron ist
-        const message = styleText(['black', 'bgWhite'], 'Query:');
-        console.log(`${message} ${event.query}`);
-    });
+  debugClient.$on('query', (event) => {
+    // console.log(), weil der Pino-Logger asynchron ist
+    const message = styleText(['black', 'bgWhite'], 'Query:');
+    console.log(`${message} ${event.query}`);
+  });
 
-    tmpClient = debugClient;
+  tmpClient = debugClient;
 } else {
-    const prodClient = new PrismaClient({ adapter });
-    tmpClient = prodClient;
+  const prodClient = new PrismaClient({ adapter });
+  tmpClient = prodClient;
 }
 
 /**
@@ -79,8 +79,8 @@ export const prismaClient = tmpClient;
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const connectDB = async () => {
-    await prismaClient.$connect();
-    logger.info('Verbindung mit der DB ist hergestellt.');
+  await prismaClient.$connect();
+  logger.info('Verbindung mit der DB ist hergestellt.');
 };
 
 /**
@@ -88,6 +88,6 @@ export const connectDB = async () => {
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const disconnectDB = async () => {
-    await prismaClient.$disconnect();
-    logger.info('Verbindung mit der DB ist getrennt.');
+  await prismaClient.$disconnect();
+  logger.info('Verbindung mit der DB ist getrennt.');
 };

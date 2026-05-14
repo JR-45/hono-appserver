@@ -22,11 +22,7 @@ import process from 'node:process';
 import { styleText } from 'node:util';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { prismaQueryInsights } from '@prisma/sqlcommenter-query-insights';
-import {
-    PrismaClient,
-    type Mitglied,
-    type Prisma,
-} from './generated/prisma/client.ts';
+import { type Mitglied, type Prisma, PrismaClient } from './generated/prisma/client.ts';
 
 let message = styleText(['black', 'bgWhite'], 'Node version');
 console.log(`${message}=${process.version}`);
@@ -36,127 +32,127 @@ console.log();
 
 // "named parameter" durch JSON-Objekt
 const adapter = new PrismaPg({
-    connectionString: process.env['DATABASE_URL'],
+  connectionString: process.env['DATABASE_URL'],
 });
 
 // union type
 const log: (Prisma.LogLevel | Prisma.LogDefinition)[] = [
-    {
-        // siehe unten: prisma.$on('query', ...);
-        emit: 'event',
-        level: 'query',
-    },
-    'info',
-    'warn',
-    'error',
+  {
+    // siehe unten: prisma.$on('query', ...);
+    emit: 'event',
+    level: 'query',
+  },
+  'info',
+  'warn',
+  'error',
 ];
 
 // PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env"
 // d.h. mit PostgreSQL-User "mitglied" und Schema "mitglied"
 const prisma = new PrismaClient({
-    // shorthand property
-    adapter,
-    errorFormat: 'pretty',
-    log,
-    // Kommentar zu Log-Ausgabe:
-    // /*prismaQuery='Mitglied.findMany%3A...
-    comments: [prismaQueryInsights()],
+  // shorthand property
+  adapter,
+  errorFormat: 'pretty',
+  log,
+  // Kommentar zu Log-Ausgabe:
+  // /*prismaQuery='Mitglied.findMany%3A...
+  comments: [prismaQueryInsights()],
 });
 prisma.$on('query', (e) => {
-    message = styleText('green', `Query: ${e.query}`);
-    console.log(message);
-    message = styleText('cyan', `Duration: ${e.duration} ms`);
-    console.log(message);
+  message = styleText('green', `Query: ${e.query}`);
+  console.log(message);
+  message = styleText('cyan', `Duration: ${e.duration} ms`);
+  console.log(message);
 });
 
 export type MitgliedMitAusweisUndAusleihen = Prisma.MitgliedGetPayload<{
-    include: {
-        ausweis: true;
-        ausleihen: true;
-    };
+  include: {
+    ausweis: true;
+    ausleihen: true;
+  };
 }>;
 
 // Operationen mit dem Model "Mitglied"
 try {
-    await prisma.$connect();
+  await prisma.$connect();
 
-    // Das Resultat ist null, falls kein Datensatz gefunden
-    const mitglied: Mitglied | null = await prisma.mitglied.findUnique({
-        where: { id: 1 },
-    });
-    message = styleText(['black', 'bgWhite'], 'mitglied');
-    console.log(`${message} = %j`, mitglied);
-    console.log();
+  // Das Resultat ist null, falls kein Datensatz gefunden
+  const mitglied: Mitglied | null = await prisma.mitglied.findUnique({
+    where: { id: 1 },
+  });
+  message = styleText(['black', 'bgWhite'], 'mitglied');
+  console.log(`${message} = %j`, mitglied);
+  console.log();
 
-    // SELECT *
-    // FROM   mitglied
-    // JOIN   ausweis ON mitglied.id = ausweis.mitglied_id
-    // WHERE  ausweis.ablaufdatum >= '2027-01-01' AND ausweis.ablaufdatum <= '2027-12-31'
-    const mitglieder: MitgliedMitAusweisUndAusleihen[] = await prisma.mitglied.findMany({
-        where: {
-            ausweis: {
-                // https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting#filter-on-relations
-                ablaufdatum: {
-                    // https://www.prisma.io/docs/orm/reference/prisma-client-reference#filter-conditions-and-operators
-                    gte: new Date('2027-01-01'),
-                    lte: new Date('2027-12-31'),
-                },
-            },
+  // SELECT *
+  // FROM   mitglied
+  // JOIN   ausweis ON mitglied.id = ausweis.mitglied_id
+  // WHERE  ausweis.ablaufdatum >= '2027-01-01' AND ausweis.ablaufdatum <= '2027-12-31'
+  const mitglieder: MitgliedMitAusweisUndAusleihen[] = await prisma.mitglied.findMany({
+    where: {
+      ausweis: {
+        // https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting#filter-on-relations
+        ablaufdatum: {
+          // https://www.prisma.io/docs/orm/reference/prisma-client-reference#filter-conditions-and-operators
+          gte: new Date('2027-01-01'),
+          lte: new Date('2027-12-31'),
         },
-        // Fetch-Join mit Ausweis und Ausleihen
-        include: {
-            ausweis: true,
-            ausleihen: true,
-        },
-    });
-    message = styleText(['black', 'bgWhite'], 'mitglieder');
-    console.log(`${message} = %j`, mitglieder);
-    console.log();
+      },
+    },
+    // Fetch-Join mit Ausweis und Ausleihen
+    include: {
+      ausweis: true,
+      ausleihen: true,
+    },
+  });
+  message = styleText(['black', 'bgWhite'], 'mitglieder');
+  console.log(`${message} = %j`, mitglieder);
+  console.log();
 
-    // higher-order function und arrow function
-    const ausleihen = mitglieder.map((b) => b.ausleihen);
-    message = styleText(['black', 'bgWhite'], 'ausleihen');
-    console.log(`${message} = %j`, ausleihen);
-    console.log();
+  // higher-order function und arrow function
+  const ausleihen = mitglieder.map((b) => b.ausleihen);
+  message = styleText(['black', 'bgWhite'], 'ausleihen');
+  console.log(`${message} = %j`, ausleihen);
+  console.log();
 
-    // union type
-    const ausweis = mitglieder.map((b) => b.ausweis?.ablaufdatum);
-    message = styleText(['black', 'bgWhite'], 'ausweis');
-    console.log(`${message} = %j`, ausweis);
-    console.log();
+  // union type
+  const ausweis = mitglieder.map((b) => b.ausweis?.ablaufdatum);
+  message = styleText(['black', 'bgWhite'], 'ausweis');
+  console.log(`${message} = %j`, ausweis);
+  console.log();
 
-    // Pagination
-    const mitgliederPage2: Mitglied[] = await prisma.mitglied.findMany({
-        skip: 2,
-        take: 2,
-    });
-    message = styleText(['black', 'bgWhite'], 'mitgliederPage2');
-    console.log(`${message} = %j`, mitgliederPage2);
-    console.log();
+  // Pagination
+  const mitgliederPage2: Mitglied[] = await prisma.mitglied.findMany({
+    skip: 2,
+    take: 2,
+  });
+  message = styleText(['black', 'bgWhite'], 'mitgliederPage2');
+  console.log(`${message} = %j`, mitgliederPage2);
+  console.log();
 } finally {
-    await prisma.$disconnect();
+  await prisma.$disconnect();
 }
 
 // PrismaClient mit PostgreSQL-User "postgres", d.h. mit Administrationsrechten
 const adapterAdmin = new PrismaPg({
-    connectionString: process.env['DATABASE_URL_ADMIN'],
+  connectionString: process.env['DATABASE_URL_ADMIN'],
 });
 const prismaAdmin = new PrismaClient({ adapter: adapterAdmin });
 try {
-    await prismaAdmin.$connect();
+  await prismaAdmin.$connect();
 
-    const mitgliederAdmin: Mitglied[] = await prismaAdmin.mitglied.findMany({
-        where: {
-            ausweis: {
-                ablaufdatum: {
-                    gte: new Date('2027-01-01'),
-                    lte: new Date('2027-12-31'),
-                },
-            },
+  const mitgliederAdmin: Mitglied[] = await prismaAdmin.mitglied.findMany({
+    where: {
+      ausweis: {
+        ablaufdatum: {
+          gte: new Date('2027-01-01'),
+          lte: new Date('2027-12-31'),
         },
-    });
-    message = styleText(['black', 'bgWhite'], 'mitgliederAdmin');
-    console.log(`${message} = ${JSON.stringify(mitgliederAdmin)}`);
+      },
+    },
+  });
+  message = styleText(['black', 'bgWhite'], 'mitgliederAdmin');
+  console.log(`${message} = ${JSON.stringify(mitgliederAdmin)}`);
 } finally {
-    await prismaAdmin.$disconnect();
+  await prismaAdmin.$disconnect();
 }

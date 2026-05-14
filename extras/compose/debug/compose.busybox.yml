@@ -25,12 +25,7 @@
 services:
   busybox:
     image: busybox:1.37.0
-    command:
-      [
-        "sh",
-        "-c",
-        "echo 'Container mit busybox ist gestartet.' && sleep infinity",
-      ]
+    command: ["sh", "-c", "echo 'Container mit busybox ist gestartet.' && sleep infinity"]
     networks: [acme-network]
     hostname: busybox
     cap_drop: [ALL]

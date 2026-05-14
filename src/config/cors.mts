@@ -14,53 +14,53 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 export const corsOptions = {
-    // Access-Control-Allow-Origin (nur Requests von origin zulassen)
-    origin: [
-        // Angular mit devserver
-        'https://localhost:4200',
-        // Angular mit devserver (HTTP)
-        'http://localhost:4200',
-        // React mit Vite und devserver
-        'https://localhost:5173',
-        // React mit Vite und devserver (HTTP)
-        'http://localhost:5173',
-        // Keycloak
-        'http://localhost:8843',
-        // Keycloak (HTTP)
-        'http://localhost:8880',
-    ],
-    // origin: true,
+  // Access-Control-Allow-Origin (nur Requests von origin zulassen)
+  origin: [
+    // Angular mit devserver
+    'https://localhost:4200',
+    // Angular mit devserver (HTTP)
+    'http://localhost:4200',
+    // React mit Vite und devserver
+    'https://localhost:5173',
+    // React mit Vite und devserver (HTTP)
+    'http://localhost:5173',
+    // Keycloak
+    'http://localhost:8843',
+    // Keycloak (HTTP)
+    'http://localhost:8880',
+  ],
+  // origin: true,
 
-    // Access-Control-Allow-Methods
-    allowMethods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
-    // Access-Control-Allow-Headers
-    allowedHeaders: [
-        'Origin',
-        'Accept',
-        'Content-Type',
-        'Authorization',
-        'Allow',
-        'Content-Length',
-        'Date',
-        'If-Match',
-        'If-Not-Match',
-        'sec-fetch-mode',
-        'sec-fetch-site',
-        'sec-fetch-dest',
-    ],
-    // Access-Control-Max-Age: 24 * 60 * 60
-    maxAge: 86_400,
-    // Access-Control-Expose-Headers
-    exposedHeaders: [
-        'Content-Type',
-        'Content-Length',
-        'ETag',
-        'Location',
-        'Date',
-        'Last-Modified',
-        'Access-Control-Allow-Origin',
-        'Content-Security-Policy',
-        'Strict-Transport-Security',
-        'X-Content-Type-Options',
-    ],
+  // Access-Control-Allow-Methods
+  allowMethods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
+  // Access-Control-Allow-Headers
+  allowedHeaders: [
+    'Origin',
+    'Accept',
+    'Content-Type',
+    'Authorization',
+    'Allow',
+    'Content-Length',
+    'Date',
+    'If-Match',
+    'If-Not-Match',
+    'sec-fetch-mode',
+    'sec-fetch-site',
+    'sec-fetch-dest',
+  ],
+  // Access-Control-Max-Age: 24 * 60 * 60
+  maxAge: 86_400,
+  // Access-Control-Expose-Headers
+  exposedHeaders: [
+    'Content-Type',
+    'Content-Length',
+    'ETag',
+    'Location',
+    'Date',
+    'Last-Modified',
+    'Access-Control-Allow-Origin',
+    'Content-Security-Policy',
+    'Strict-Transport-Security',
+    'X-Content-Type-Options',
+  ],
 };

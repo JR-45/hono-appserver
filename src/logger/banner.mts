@@ -32,25 +32,25 @@ const logger = getLogger('banner', 'func');
  * @author [Murat Yahsi](mailto:yamu1012@h-ka.de)
  */
 export const banner = async () => {
-    const { host, nodeEnv, port, portHttp } = serverConfig;
+  const { host, nodeEnv, port, portHttp } = serverConfig;
 
-    console.log();
-    const text = await figlet.text('buch 2026.4.1');
-    console.log(text);
+  console.log();
+  const text = await figlet.text('buch 2026.4.1');
+  console.log(text);
 
-    const isContainer = /[0-9a-f]{12}/u.exec(host) ?? false;
+  const isContainer = /[0-9a-f]{12}/u.exec(host) ?? false;
 
-    // https://nodejs.org/api/process.html
-    logger.info('Bun: %s', Bun.version);
-    logger.info('Bun / Node: %s', process.version);
-    logger.info('NODE_ENV: %s', nodeEnv ?? 'undefined');
-    logger.info('Rechnername: %s', host);
-    logger.info('Port: %d', port);
-    logger.info('HTTP-Port: %d', portHttp);
-    logger.info('Betriebssystem: %s (%s)', type(), release());
-    logger.info('Username: %s', userInfo().username);
-    logger.info('Docker Container: %s', isContainer);
-    if (isContainer) {
-        logger.debug('!!! Container: Bruno nicht nutzbar mit Tokens !!!');
-    }
+  // https://nodejs.org/api/process.html
+  logger.info('Bun: %s', Bun.version);
+  logger.info('Bun / Node: %s', process.version);
+  logger.info('NODE_ENV: %s', nodeEnv ?? 'undefined');
+  logger.info('Rechnername: %s', host);
+  logger.info('Port: %d', port);
+  logger.info('HTTP-Port: %d', portHttp);
+  logger.info('Betriebssystem: %s (%s)', type(), release());
+  logger.info('Username: %s', userInfo().username);
+  logger.info('Docker Container: %s', isContainer);
+  if (isContainer) {
+    logger.debug('!!! Container: Bruno nicht nutzbar mit Tokens !!!');
+  }
 };
