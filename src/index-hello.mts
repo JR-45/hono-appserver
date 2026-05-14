@@ -1,0 +1,106 @@
+// Copyright (C) 2026 - present Jeton Rama, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+import { type Context, Hono, type Next } from 'hono';
+import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
+import {
+    createProblemDetails,
+    forbidden,
+    preconditionFailed,
+    unauthorized,
+    unprocessableContent,
+} from './problem-details.mts';
+import { type ZodError } from 'zod';
+import { router as authRouter } from './security/auth-router.mts';
+import { compress } from 'hono/compress';
+import { cors } from 'hono/cors';
+import { corsOptions } from './config/cors.mts';
+import { createMiddleware } from 'hono/factory';
+import { router as devRouter } from './config/dev/dev-router.mts';
+import { env } from './config/env.mts';
+import { getLogger } from './logger/logger.mts';
+import { router as mitgliedRouter } from './mitglied/router/mitglied-router.mts';
+import { router as mitgliedWriteRouter } from './mitglied/router/mitglied-write-router.mts';
+import { paths } from './config/paths.mts';
+import { requestLogger } from './logger/request-logger.mts';
+import { responseTime } from './logger/response-time.mts';
+import { secureHeaders } from 'hono/secure-headers';
+import { showRoutes } from 'hono/dev';
+
+export const app = new Hono();
+
+const logger = getLogger('app', 'file');
+
+// -----------------------------------------------------------------------------
+// M i d d l e w a r e
+// -----------------------------------------------------------------------------
+
+const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
+    c.header('X-Content-Type-Options', 'nosniff');
+    c.header('X-Frame-Options', 'SAMEORIGIN');
+    await next();
+});
+
+app.use(secureHeaders(), cors(corsOptions), securityHeaders, compress());
+
+if (logger.isLevelEnabled('debug')) {
+    app.use(responseTime, requestLogger);
+}
+
+// -----------------------------------------------------------------------------
+// R o u t e n
+// -----------------------------------------------------------------------------
+app.route(paths.rest, mitgliedRouter);
+app.route(paths.rest, mitgliedWriteRouter);
+app.route(paths.auth, authRouter);
+
+const { NODE_ENV } = env;
+if (NODE_ENV === 'development' || NODE_ENV === 'test') {
+    app.route(paths.dev, devRouter);
+}
+
+if (logger.isLevelEnabled('debug')) {
+    showRoutes(app, { verbose: true });
+}
+
+// -----------------------------------------------------------------------------
+// E r r o r   H a n d l e r
+// -----------------------------------------------------------------------------
+// oxlint-disable-next-line promise/prefer-await-to-callbacks
+app.onError((error, c) => {
+    if (error.name === 'ZodError') {
+        return createProblemDetails(
+            c,
+            unprocessableContent,
+            (error as ZodError).issues,
+        );
+    }
+
+    if (error instanceof UnauthorizedError) {
+        return createProblemDetails(c, unauthorized, error.message);
+    }
+
+    if (error instanceof ForbiddenError) {
+        return createProblemDetails(c, forbidden, error.message);
+    }
+
+    if (error.message.includes('Versionskonflikt')) {
+        return createProblemDetails(c, preconditionFailed, error.message);
+    }
+
+    logger.error('Interner Fehler: %o', error as object);
+    console.log(error.stack);
+    return c.body('Interner Fehler', 500);
+});
