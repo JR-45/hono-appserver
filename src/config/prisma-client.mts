@@ -29,7 +29,7 @@ import { styleText } from 'node:util';
 const logger = getLogger('prisma-client', 'file');
 
 // PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env"
-// d.h. mit PostgreSQL-User "buch" und Schema "buch"
+// d.h. mit PostgreSQL-User "mitglied" und Schema "mitglied"
 export const adapter = new PrismaPg({
   connectionString: process.env['DATABASE_URL'],
 });
@@ -51,7 +51,7 @@ if (logger.isLevelEnabled('debug')) {
       'error',
     ],
     // Kommentar zu Log-Ausgabe generieren:
-    // /*prismaQuery='Buch.findMany%3A... mit base64-Codierung
+    // /*prismaQuery='Mitglied.findMany%3A... mit base64-Codierung
     // https://www.prisma.io/docs/orm/reference/prisma-client-reference#comments
     comments: [prismaQueryInsights()],
   });
