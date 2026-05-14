@@ -31,3 +31,4 @@ beispiele-write
 
 # Claude Code
 .claude/
+log/*.log
