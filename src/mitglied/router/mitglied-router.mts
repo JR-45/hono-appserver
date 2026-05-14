@@ -117,7 +117,7 @@ router.get('/file/:id', async (c) => {
     return c.notFound();
   }
 
-  return c.body(mitgliedFile.data, {
+  return c.body(new Uint8Array(mitgliedFile.data), {
     headers: { 'Content-Type': mitgliedFile.mimetype ?? '' },
   });
 });
