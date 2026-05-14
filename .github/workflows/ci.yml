@@ -43,7 +43,7 @@ jobs:
         run: bun prisma generate
 
       - name: Lint
-        run: bun run eslint
+        run: bun run lint
 
       # TODO: Tests aktivieren sobald Phase 7 abgeschlossen ist
       #- name: Test
