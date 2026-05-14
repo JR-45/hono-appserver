@@ -50,9 +50,23 @@ model Mitglied {
   aktualisiert    DateTime         @default(now()) @db.Timestamp(6) @updatedAt
   ausleihen       Ausleihe[]
   ausweis         Ausweis?
+  mitgliedFile    MitgliedFile?
 
   @@index([nachname])
   @@map("mitglied")
+  @@schema("mitglied")
+}
+
+model MitgliedFile {
+  id         Int      @id @default(autoincrement())
+  data       Bytes
+  filename   String
+  mimetype   String?
+  mitgliedId Int      @unique @map("mitglied_id")
+  mitglied   Mitglied @relation(fields: [mitgliedId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([mitgliedId])
+  @@map("mitglied_file")
   @@schema("mitglied")
 }
 
