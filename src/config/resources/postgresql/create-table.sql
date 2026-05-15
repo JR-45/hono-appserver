@@ -55,3 +55,13 @@ CREATE TABLE IF NOT EXISTS ausleihe (
 );
 
 CREATE INDEX IF NOT EXISTS ausleihe_mitglied_id_idx ON ausleihe(mitglied_id);
+
+CREATE TABLE IF NOT EXISTS mitglied_file (
+    id          INTEGER GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
+    data        BYTEA NOT NULL,
+    filename    TEXT NOT NULL,
+    mimetype    TEXT,
+    mitglied_id INTEGER NOT NULL UNIQUE REFERENCES mitglied ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS mitglied_file_mitglied_id_idx ON mitglied_file(mitglied_id);
