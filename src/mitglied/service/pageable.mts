@@ -21,29 +21,29 @@ export const DEFAULT_PAGE_NUMBER = 0;
  * Datenstruktur für _Pagination_.
  */
 export type Pageable = {
-    /**
-     * Seitennummer mit Zählung ab 0.
-     */
-    readonly number: number;
-    /**
-     * Maximale Anzahl Datensätze auf einer Seite
-     */
-    readonly size: number;
+  /**
+   * Seitennummer mit Zählung ab 0.
+   */
+  readonly number: number;
+  /**
+   * Maximale Anzahl Datensätze auf einer Seite
+   */
+  readonly size: number;
 };
 
 /**
  * Datenstruktur, wenn ein Objekt von `Pageable` erstellt wird.
  */
 export type PageableProps = {
-    /**
-     * Seitennummer mit Zählung ab 0.
-     */
-    readonly number?: string | undefined;
+  /**
+   * Seitennummer mit Zählung ab 0.
+   */
+  readonly number?: string | undefined;
 
-    /**
-     * Maximale Anzahl Datensätze auf einer Seite
-     */
-    readonly size?: string | undefined;
+  /**
+   * Maximale Anzahl Datensätze auf einer Seite
+   */
+  readonly size?: string | undefined;
 };
 
 /**
@@ -51,27 +51,27 @@ export type PageableProps = {
  * @returns Objekt vom Typ `Pageable`.
  */
 export const createPageable = ({ number, size }: PageableProps): Pageable => {
-    const numberFloat = Number(number);
-    let numberInt: number;
-    if (Number.isNaN(numberFloat) || !Number.isInteger(numberFloat)) {
-        numberInt = DEFAULT_PAGE_NUMBER;
-    } else {
-        numberInt = numberFloat - 1;
-        if (numberInt < 0) {
-            numberInt = DEFAULT_PAGE_NUMBER;
-        }
+  const numberFloat = Number(number);
+  let numberInt: number;
+  if (Number.isNaN(numberFloat) || !Number.isInteger(numberFloat)) {
+    numberInt = DEFAULT_PAGE_NUMBER;
+  } else {
+    numberInt = numberFloat - 1;
+    if (numberInt < 0) {
+      numberInt = DEFAULT_PAGE_NUMBER;
     }
+  }
 
-    const sizeFloat = Number(size);
-    let sizeInt: number;
-    if (Number.isNaN(sizeFloat) || !Number.isInteger(sizeFloat)) {
-        sizeInt = DEFAULT_PAGE_SIZE;
-    } else {
-        sizeInt = sizeFloat;
-        if (sizeInt < 1 || sizeInt > MAX_PAGE_SIZE) {
-            sizeInt = DEFAULT_PAGE_SIZE;
-        }
+  const sizeFloat = Number(size);
+  let sizeInt: number;
+  if (Number.isNaN(sizeFloat) || !Number.isInteger(sizeFloat)) {
+    sizeInt = DEFAULT_PAGE_SIZE;
+  } else {
+    sizeInt = sizeFloat;
+    if (sizeInt < 1 || sizeInt > MAX_PAGE_SIZE) {
+      sizeInt = DEFAULT_PAGE_SIZE;
     }
+  }
 
-    return { number: numberInt, size: sizeInt };
+  return { number: numberInt, size: sizeInt };
 };

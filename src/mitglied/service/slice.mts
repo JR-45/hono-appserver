@@ -14,6 +14,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 export type Slice<T> = {
-    readonly content: T[];
-    readonly totalElements: number;
+  readonly content: T[];
+  readonly totalElements: number;
 };

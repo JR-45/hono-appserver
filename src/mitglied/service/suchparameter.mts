@@ -21,19 +21,19 @@
 import { type Geschlecht, type Mitgliedsstatus } from '../../generated/prisma/enums.ts';
 
 export type Suchparameter = {
-    readonly vorname?: string;
-    readonly nachname?: string;
-    readonly email?: string;
-    readonly geschlecht?: Geschlecht;
-    readonly mitgliedsstatus?: Mitgliedsstatus;
-    readonly beitrittsdatum?: string;
+  readonly vorname?: string;
+  readonly nachname?: string;
+  readonly email?: string;
+  readonly geschlecht?: Geschlecht;
+  readonly mitgliedsstatus?: Mitgliedsstatus;
+  readonly beitrittsdatum?: string;
 };
 
 export const suchparameterNamen = [
-    'vorname',
-    'nachname',
-    'email',
-    'geschlecht',
-    'mitgliedsstatus',
-    'beitrittsdatum',
+  'vorname',
+  'nachname',
+  'email',
+  'geschlecht',
+  'mitgliedsstatus',
+  'beitrittsdatum',
 ];

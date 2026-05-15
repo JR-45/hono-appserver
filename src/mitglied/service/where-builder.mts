@@ -25,10 +25,10 @@ import { getLogger } from '../../logger/logger.mts';
 
 /** Typdefinitionen für die Suche mit der Mitglied-ID. */
 export type BuildIdParams = {
-    /** ID des gesuchten Mitglieds. */
-    readonly id: number;
-    /** Sollen die Ausleihen mitgeladen werden? */
-    readonly mitAusleihen?: boolean;
+  /** ID des gesuchten Mitglieds. */
+  readonly id: number;
+  /** Sollen die Ausleihen mitgeladen werden? */
+  readonly mitAusleihen?: boolean;
 };
 
 const logger = getLogger('buildWhere', 'func');
@@ -40,43 +40,42 @@ const logger = getLogger('buildWhere', 'func');
  * mit einem Mindestwert.
  * @returns MitgliedWhereInput
  */
-// oxlint-disable-next-line max-lines-per-function
 export const buildWhere = (suchparameter: Suchparameter) => {
-    logger.debug('build: suchparameter=%o', suchparameter);
+  logger.debug('build: suchparameter=%o', suchparameter);
 
-    const where: MitgliedWhereInput = {};
+  const where: MitgliedWhereInput = {};
 
-    Object.entries(suchparameter).forEach(([key, value]) => {
-        switch (key) {
-            case 'vorname':
-                where.vorname = {
-                    contains: value as string,
-                    mode: Prisma.QueryMode.insensitive,
-                };
-                break;
-            case 'nachname':
-                where.nachname = {
-                    contains: value as string,
-                    mode: Prisma.QueryMode.insensitive,
-                };
-                break;
-            case 'email':
-                where.email = { equals: value as string };
-                break;
-            case 'geschlecht':
-                where.geschlecht = { equals: value as Geschlecht };
-                break;
-            case 'mitgliedsstatus':
-                where.mitgliedsstatus = { equals: value as Mitgliedsstatus };
-                break;
-            case 'beitrittsdatum':
-                where.beitrittsdatum = { gte: new Date(value as string) };
-                break;
-            default:
-                break;
-        }
-    });
+  Object.entries(suchparameter).forEach(([key, value]) => {
+    switch (key) {
+      case 'vorname':
+        where.vorname = {
+          contains: value as string,
+          mode: Prisma.QueryMode.insensitive,
+        };
+        break;
+      case 'nachname':
+        where.nachname = {
+          contains: value as string,
+          mode: Prisma.QueryMode.insensitive,
+        };
+        break;
+      case 'email':
+        where.email = { equals: value as string };
+        break;
+      case 'geschlecht':
+        where.geschlecht = { equals: value as Geschlecht };
+        break;
+      case 'mitgliedsstatus':
+        where.mitgliedsstatus = { equals: value as Mitgliedsstatus };
+        break;
+      case 'beitrittsdatum':
+        where.beitrittsdatum = { gte: new Date(value as string) };
+        break;
+      default:
+        break;
+    }
+  });
 
-    logger.debug('build: where=%o', where);
-    return where;
+  logger.debug('build: where=%o', where);
+  return where;
 };

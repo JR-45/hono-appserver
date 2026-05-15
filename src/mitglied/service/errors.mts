@@ -29,34 +29,34 @@ export class NotFoundError extends Error {}
  * Error-Klasse für eine bereits existierende E-Mail-Adresse.
  */
 export class EmailExistsError extends Error {
-    readonly email: string | undefined;
+  readonly email: string | undefined;
 
-    constructor(email: string | undefined) {
-        super(`Die E-Mail-Adresse ${email} existiert bereits.`);
-        this.email = email;
-    }
+  constructor(email: string | undefined) {
+    super(`Die E-Mail-Adresse ${email} existiert bereits.`);
+    this.email = email;
+  }
 }
 
 /**
  * Error-Klasse für eine ungültige Versionsnummer beim Ändern.
  */
 export class VersionInvalidError extends Error {
-    readonly version: string | undefined;
+  readonly version: string | undefined;
 
-    constructor(version: string | undefined) {
-        super(`Die Versionsnummer ${version} ist ungueltig.`);
-        this.version = version;
-    }
+  constructor(version: string | undefined) {
+    super(`Die Versionsnummer ${version} ist ungueltig.`);
+    this.version = version;
+  }
 }
 
 /**
  * Error-Klasse für eine veraltete Versionsnummer beim Ändern.
  */
 export class VersionOutdatedError extends Error {
-    readonly version: number;
+  readonly version: number;
 
-    constructor(version: number) {
-        super(`Die Versionsnummer ${version} ist nicht aktuell.`);
-        this.version = version;
-    }
+  constructor(version: number) {
+    super(`Die Versionsnummer ${version} ist nicht aktuell.`);
+    this.version = version;
+  }
 }

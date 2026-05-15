@@ -19,34 +19,34 @@
  * @packageDocumentation
  */
 
-import { type MitgliedFile, type Prisma } from '../../generated/prisma/client.ts';
 import {
-    EmailExistsError,
-    NotFoundError,
-    VersionInvalidError,
-    VersionOutdatedError,
+  EmailExistsError,
+  NotFoundError,
+  VersionInvalidError,
+  VersionOutdatedError,
 } from './errors.mts';
+import { type MitgliedFile, type Prisma } from '../../generated/prisma/client.ts';
 import { MitgliedService } from './mitglied-service.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { prismaClient } from '../../config/prisma-client.mts';
 
 export type MitgliedCreate = Prisma.MitgliedCreateInput;
 type MitgliedCreated = Prisma.MitgliedGetPayload<{
-    include: {
-        ausweis: true;
-        ausleihen: true;
-    };
+  include: {
+    ausweis: true;
+    ausleihen: true;
+  };
 }>;
 
 export type MitgliedUpdate = Prisma.MitgliedUpdateInput;
 /** Typdefinitionen zum Aktualisieren eines Mitglieds mit `update`. */
 export type UpdateParams = {
-    /** ID des zu aktualisierenden Mitglieds. */
-    readonly id: number | undefined;
-    /** Mitglied-Objekt mit den aktualisierten Werten. */
-    readonly mitglied: MitgliedUpdate;
-    /** Versionsnummer für die zu aktualisierenden Werte. */
-    readonly version: string;
+  /** ID des zu aktualisierenden Mitglieds. */
+  readonly id: number | undefined;
+  /** Mitglied-Objekt mit den aktualisierten Werten. */
+  readonly mitglied: MitgliedUpdate;
+  /** Versionsnummer für die zu aktualisierenden Werte. */
+  readonly version: string;
 };
 type MitgliedUpdated = Prisma.MitgliedGetPayload<{}>;
 
@@ -58,196 +58,175 @@ export type MitgliedFileCreated = Prisma.MitgliedFileGetPayload<{}>;
  * Schreiben von Mitgliedern und greift mit _Prisma_ auf die DB zu.
  */
 export class MitgliedWriteService {
-    private static readonly VERSION_PATTERN = /^"\d{1,3}"/u;
+  private static readonly VERSION_PATTERN = /^"\d{1,3}"/u;
 
-    readonly #readService: MitgliedService;
+  readonly #readService: MitgliedService;
 
-    readonly #logger = getLogger(MitgliedWriteService.name);
+  readonly #logger = getLogger(MitgliedWriteService.name);
 
-    constructor(readService: MitgliedService) {
-        this.#readService = readService;
+  constructor(readService: MitgliedService) {
+    this.#readService = readService;
+  }
+
+  /**
+   * Ein neues Mitglied soll angelegt werden.
+   * @param mitglied Das neu abzulegende Mitglied
+   * @returns Die ID des neu angelegten Mitglieds
+   * @throws EmailExistsError falls die E-Mail-Adresse bereits existiert
+   */
+  async create(mitglied: MitgliedCreate) {
+    this.#logger.debug('create: mitglied=%o', mitglied);
+    await this.#validateCreate(mitglied);
+
+    // Neuer Datensatz mit generierter ID
+    let mitgliedDb: MitgliedCreated | undefined;
+    await prismaClient.$transaction(async (tx) => {
+      mitgliedDb = await tx.mitglied.create({
+        data: mitglied,
+        include: { ausweis: true, ausleihen: true },
+      });
+    });
+
+    this.#logger.debug('create: mitgliedDb.id=%s', mitgliedDb?.id);
+    return mitgliedDb?.id ?? Number.NaN;
+  }
+
+  /**
+   * Zu einem vorhandenen Mitglied eine Binärdatei mit z.B. einem Bild abspeichern.
+   * @param mitgliedId ID des vorhandenen Mitglieds
+   * @param data Bytes der Datei als Buffer Node
+   * @param name Dateiname
+   * @param size Dateigröße in Bytes
+   * @param type MIME-Typ, z.B. image/png
+   * @returns Entity-Objekt für `MitgliedFile`
+   */
+  // oxlint-disable-next-line max-params
+  async addFile(
+    mitgliedId: number,
+    data: Buffer,
+    name: string,
+    size: number,
+    type: string,
+  ): Promise<Readonly<MitgliedFile> | undefined> {
+    this.#logger.debug('addFile: mitgliedId=%d, filename=%s, size=%d', mitgliedId, name, size);
+
+    let mitgliedFileCreated: MitgliedFileCreated | undefined;
+    await prismaClient.$transaction(async (tx) => {
+      // Mitglied ermitteln, falls vorhanden
+      const mitglied = await tx.mitglied.findUnique({
+        where: { id: mitgliedId },
+      });
+      if (mitglied === null) {
+        this.#logger.debug('Es gibt kein Mitglied mit der ID %d', mitgliedId);
+        throw new NotFoundError(`Es gibt kein Mitglied mit der ID ${mitgliedId}.`);
+      }
+
+      // evtl. vorhandene Datei löschen
+      await tx.mitgliedFile.deleteMany({ where: { mitgliedId } });
+
+      const mitgliedFile: MitgliedFileCreate = {
+        filename: name,
+        data: data as Uint8Array<ArrayBuffer>,
+        mimetype: type,
+        mitgliedId,
+      };
+      mitgliedFileCreated = await tx.mitgliedFile.create({ data: mitgliedFile });
+    });
+
+    this.#logger.debug(
+      'addFile: id=%s, byteLength=%s, filename=%s, mimetype=%s',
+      mitgliedFileCreated?.id,
+      mitgliedFileCreated?.data.byteLength,
+      mitgliedFileCreated?.filename,
+      mitgliedFileCreated?.mimetype,
+    );
+    return mitgliedFileCreated;
+  }
+
+  /**
+   * Ein vorhandenes Mitglied soll aktualisiert werden. "Destructured" Argument
+   * mit id (ID des zu aktualisierenden Mitglieds), mitglied (zu aktualisierendes
+   * Mitglied) und version (Versionsnummer für optimistische Synchronisation).
+   * @returns Die neue Versionsnummer gemäß optimistischer Synchronisation
+   * @throws NotFoundException falls kein Mitglied zur ID vorhanden ist
+   * @throws VersionInvalidException falls die Versionsnummer ungültig ist
+   * @throws VersionOutdatedException falls die Versionsnummer veraltet ist
+   */
+  // https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
+  async update({ id, mitglied, version }: UpdateParams) {
+    this.#logger.debug('update: id=%s, mitglied=%o, version=%s', id, mitglied, version);
+    if (id === undefined) {
+      this.#logger.debug('update: Keine gueltige ID');
+      throw new NotFoundError(`Es gibt kein Mitglied mit der ID ${id}.`);
     }
 
-    /**
-     * Ein neues Mitglied soll angelegt werden.
-     * @param mitglied Das neu abzulegende Mitglied
-     * @returns Die ID des neu angelegten Mitglieds
-     * @throws EmailExistsError falls die E-Mail-Adresse bereits existiert
-     */
-    async create(mitglied: MitgliedCreate) {
-        this.#logger.debug('create: mitglied=%o', mitglied);
-        await this.#validateCreate(mitglied);
+    await this.#validateUpdate(id, version);
 
-        // Neuer Datensatz mit generierter ID
-        let mitgliedDb: MitgliedCreated | undefined;
-        await prismaClient.$transaction(async (tx) => {
-            mitgliedDb = await tx.mitglied.create({
-                data: mitglied,
-                include: { ausweis: true, ausleihen: true },
-            });
-        });
+    mitglied.version = { increment: 1 };
+    let mitgliedUpdated: MitgliedUpdated | undefined;
+    await prismaClient.$transaction(async (tx) => {
+      mitgliedUpdated = await tx.mitglied.update({
+        data: mitglied,
+        where: { id },
+      });
+    });
+    this.#logger.debug('update: mitgliedUpdated=%s', JSON.stringify(mitgliedUpdated));
 
-        this.#logger.debug('create: mitgliedDb.id=%s', mitgliedDb?.id);
-        return mitgliedDb?.id ?? Number.NaN;
+    return mitgliedUpdated?.version ?? Number.NaN;
+  }
+
+  /**
+   * Ein Mitglied wird asynchron anhand seiner ID gelöscht.
+   *
+   * @param id ID des zu löschenden Mitglieds
+   * @returns true, falls das Mitglied vorhanden war und gelöscht wurde. Sonst false.
+   */
+  async delete(id: number) {
+    this.#logger.debug('delete: id=%d', id);
+
+    const mitglied = await prismaClient.mitglied.findUnique({
+      where: { id },
+    });
+    if (mitglied === null) {
+      this.#logger.debug('delete: not found');
+      return false;
     }
 
-    /**
-     * Zu einem vorhandenen Mitglied eine Binärdatei mit z.B. einem Bild abspeichern.
-     * @param mitgliedId ID des vorhandenen Mitglieds
-     * @param data Bytes der Datei als Buffer Node
-     * @param name Dateiname
-     * @param size Dateigröße in Bytes
-     * @param type MIME-Typ, z.B. image/png
-     * @returns Entity-Objekt für `MitgliedFile`
-     */
-    // oxlint-disable-next-line max-params
-    async addFile(
-        mitgliedId: number,
-        data: Buffer,
-        name: string,
-        size: number,
-        type: string,
-    ): Promise<Readonly<MitgliedFile> | undefined> {
-        this.#logger.debug(
-            'addFile: mitgliedId=%d, filename=%s, size=%d',
-            mitgliedId,
-            name,
-            size,
-        );
+    await prismaClient.$transaction(async (tx) => {
+      await tx.mitglied.delete({ where: { id } });
+    });
 
-        let mitgliedFileCreated: MitgliedFileCreated | undefined;
-        await prismaClient.$transaction(async (tx) => {
-            // Mitglied ermitteln, falls vorhanden
-            const mitglied = await tx.mitglied.findUnique({
-                where: { id: mitgliedId },
-            });
-            if (mitglied === null) {
-                this.#logger.debug('Es gibt kein Mitglied mit der ID %d', mitgliedId);
-                throw new NotFoundError(
-                    `Es gibt kein Mitglied mit der ID ${mitgliedId}.`,
-                );
-            }
+    this.#logger.debug('delete');
+    return true;
+  }
 
-            // evtl. vorhandene Datei löschen
-            await tx.mitgliedFile.deleteMany({ where: { mitgliedId } });
-
-            const mitgliedFile: MitgliedFileCreate = {
-                filename: name,
-                data: data as Uint8Array<ArrayBuffer>,
-                mimetype: type,
-                mitgliedId,
-            };
-            mitgliedFileCreated = await tx.mitgliedFile.create({ data: mitgliedFile });
-        });
-
-        this.#logger.debug(
-            'addFile: id=%s, byteLength=%s, filename=%s, mimetype=%s',
-            mitgliedFileCreated?.id,
-            mitgliedFileCreated?.data.byteLength,
-            mitgliedFileCreated?.filename,
-            mitgliedFileCreated?.mimetype,
-        );
-        return mitgliedFileCreated;
+  async #validateCreate({ email }: Prisma.MitgliedCreateInput): Promise<undefined> {
+    this.#logger.debug('#validateCreate: email=%s', email);
+    if (email === undefined) {
+      this.#logger.debug('#validateCreate: ok');
+      return;
     }
 
-    /**
-     * Ein vorhandenes Mitglied soll aktualisiert werden. "Destructured" Argument
-     * mit id (ID des zu aktualisierenden Mitglieds), mitglied (zu aktualisierendes
-     * Mitglied) und version (Versionsnummer für optimistische Synchronisation).
-     * @returns Die neue Versionsnummer gemäß optimistischer Synchronisation
-     * @throws NotFoundException falls kein Mitglied zur ID vorhanden ist
-     * @throws VersionInvalidException falls die Versionsnummer ungültig ist
-     * @throws VersionOutdatedException falls die Versionsnummer veraltet ist
-     */
-    // https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
-    async update({ id, mitglied, version }: UpdateParams) {
-        this.#logger.debug(
-            'update: id=%s, mitglied=%o, version=%s',
-            id,
-            mitglied,
-            version,
-        );
-        if (id === undefined) {
-            this.#logger.debug('update: Keine gueltige ID');
-            throw new NotFoundError(`Es gibt kein Mitglied mit der ID ${id}.`);
-        }
+    const anzahl = await prismaClient.mitglied.count({ where: { email } });
+    if (anzahl > 0) {
+      this.#logger.debug('#validateCreate: email existiert: %s', email);
+      throw new EmailExistsError(email);
+    }
+    this.#logger.debug('#validateCreate: ok');
+  }
 
-        await this.#validateUpdate(id, version);
-
-        mitglied.version = { increment: 1 };
-        let mitgliedUpdated: MitgliedUpdated | undefined;
-        await prismaClient.$transaction(async (tx) => {
-            mitgliedUpdated = await tx.mitglied.update({
-                data: mitglied,
-                where: { id },
-            });
-        });
-        this.#logger.debug(
-            'update: mitgliedUpdated=%s',
-            JSON.stringify(mitgliedUpdated),
-        );
-
-        return mitgliedUpdated?.version ?? Number.NaN;
+  async #validateUpdate(id: number, versionStr: string) {
+    this.#logger.debug('#validateUpdate: id=%d, versionStr=%s', id, versionStr);
+    if (!MitgliedWriteService.VERSION_PATTERN.test(versionStr)) {
+      throw new VersionInvalidError(versionStr);
     }
 
-    /**
-     * Ein Mitglied wird asynchron anhand seiner ID gelöscht.
-     *
-     * @param id ID des zu löschenden Mitglieds
-     * @returns true, falls das Mitglied vorhanden war und gelöscht wurde. Sonst false.
-     */
-    async delete(id: number) {
-        this.#logger.debug('delete: id=%d', id);
+    const version = Number.parseInt(versionStr.slice(1, -1), 10);
+    const mitgliedDb = await this.#readService.findById({ id });
 
-        const mitglied = await prismaClient.mitglied.findUnique({
-            where: { id },
-        });
-        if (mitglied === null) {
-            this.#logger.debug('delete: not found');
-            return false;
-        }
-
-        await prismaClient.$transaction(async (tx) => {
-            await tx.mitglied.delete({ where: { id } });
-        });
-
-        this.#logger.debug('delete');
-        return true;
+    if (version < mitgliedDb.version) {
+      this.#logger.debug('#validateUpdate: versionDb=%d', version);
+      throw new VersionOutdatedError(version);
     }
-
-    async #validateCreate({
-        email,
-    }: Prisma.MitgliedCreateInput): Promise<undefined> {
-        this.#logger.debug('#validateCreate: email=%s', email);
-        if (email === undefined) {
-            this.#logger.debug('#validateCreate: ok');
-            return;
-        }
-
-        const anzahl = await prismaClient.mitglied.count({ where: { email } });
-        if (anzahl > 0) {
-            this.#logger.debug('#validateCreate: email existiert: %s', email);
-            throw new EmailExistsError(email);
-        }
-        this.#logger.debug('#validateCreate: ok');
-    }
-
-    async #validateUpdate(id: number, versionStr: string) {
-        this.#logger.debug(
-            '#validateUpdate: id=%d, versionStr=%s',
-            id,
-            versionStr,
-        );
-        if (!MitgliedWriteService.VERSION_PATTERN.test(versionStr)) {
-            throw new VersionInvalidError(versionStr);
-        }
-
-        const version = Number.parseInt(versionStr.slice(1, -1), 10);
-        const mitgliedDb = await this.#readService.findById({ id });
-
-        if (version < mitgliedDb.version) {
-            this.#logger.debug('#validateUpdate: versionDb=%d', version);
-            throw new VersionOutdatedError(version);
-        }
-    }
+  }
 }
