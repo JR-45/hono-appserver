@@ -17,19 +17,12 @@ import { DbPopulateService } from './config/dev/db-populate.mts';
 import { KeycloakService } from './security/keycloak-service.mts';
 import { MitgliedService } from './mitglied/service/mitglied-service.mts';
 import { MitgliedWriteService } from './mitglied/service/mitglied-write-service.mts';
-import { prismaClient } from './config/prisma-client.mts';
 
-const mitgliedService = new MitgliedService(prismaClient);
-const mitgliedWriteService = new MitgliedWriteService(
-    prismaClient,
-    mitgliedService,
-);
-const keycloakService = new KeycloakService();
-const dbPopulateService = new DbPopulateService();
+const mitgliedService = new MitgliedService();
 
 export const container = {
     mitgliedService,
-    mitgliedWriteService,
-    keycloakService,
-    dbPopulateService,
+    mitgliedWriteService: new MitgliedWriteService(mitgliedService),
+    keycloakService: new KeycloakService(),
+    dbPopulateService: new DbPopulateService(),
 };
