@@ -30,11 +30,11 @@ const { keycloakService } = container;
 
 /** Entity-Klasse für Token-Daten. */
 export class TokenData {
-    /** Benutzername */
-    username: string | undefined;
+  /** Benutzername */
+  username: string | undefined;
 
-    /** Passwort */
-    password: string | undefined;
+  /** Passwort */
+  password: string | undefined;
 }
 
 /**
@@ -44,21 +44,17 @@ export class TokenData {
 export const router = new Hono();
 
 router.post(paths.token, async (c) => {
-    const body: Record<string, string> = await c.req.parseBody();
-    const { username, password } = body;
-    logger.debug('post: username=%s', username);
+  const body: Record<string, string> = await c.req.parseBody();
+  const { username, password } = body;
+  logger.debug('post: username=%s', username);
 
-    const result = await keycloakService.token({
-        username,
-        password,
-    });
-    if (result === undefined) {
-        return createProblemDetails(
-            c,
-            unauthorized,
-            'Fehler beim Authentifizieren',
-        );
-    }
+  const result = await keycloakService.token({
+    username,
+    password,
+  });
+  if (result === undefined) {
+    return createProblemDetails(c, unauthorized, 'Fehler beim Authentifizieren');
+  }
 
-    return c.json(result);
+  return c.json(result);
 });

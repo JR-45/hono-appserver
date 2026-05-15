@@ -1,3 +1,4 @@
+// oxlint-disable import/max-dependencies
 // Copyright (C) 2026 - present Jeton Rama, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,13 +15,19 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type Context, Hono, type Next } from 'hono';
+import {
+  EmailExistsError,
+  NotFoundError,
+  VersionInvalidError,
+  VersionOutdatedError,
+} from './mitglied/service/errors.mts';
 import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
 import {
-    createProblemDetails,
-    forbidden,
-    preconditionFailed,
-    unauthorized,
-    unprocessableContent,
+  createProblemDetails,
+  forbidden,
+  preconditionFailed,
+  unauthorized,
+  unprocessableContent,
 } from './problem-details.mts';
 import { type ZodError } from 'zod';
 import { router as authRouter } from './security/auth-router.mts';
@@ -52,9 +59,9 @@ const logger = getLogger('app', 'file');
 
 // Zusaetzliche Security-Header
 const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
-    c.header('X-Content-Type-Options', 'nosniff');
-    c.header('X-Frame-Options', 'SAMEORIGIN');
-    await next();
+  c.header('X-Content-Type-Options', 'nosniff');
+  c.header('X-Frame-Options', 'SAMEORIGIN');
+  await next();
 });
 
 // https://hono.dev/docs/middleware/builtin/secure-headers
@@ -63,7 +70,7 @@ const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
 app.use(secureHeaders(), cors(corsOptions), securityHeaders, compress());
 
 if (logger.isLevelEnabled('debug')) {
-    app.use(responseTime, requestLogger);
+  app.use(responseTime, requestLogger);
 }
 
 // -----------------------------------------------------------------------------
@@ -75,11 +82,11 @@ app.route(paths.auth, authRouter);
 
 const { NODE_ENV } = env;
 if (NODE_ENV === 'development' || NODE_ENV === 'test') {
-    app.route(paths.dev, devRouter);
+  app.route(paths.dev, devRouter);
 }
 
 if (logger.isLevelEnabled('debug')) {
-    showRoutes(app, { verbose: true });
+  showRoutes(app, { verbose: true });
 }
 
 // -----------------------------------------------------------------------------
@@ -88,27 +95,31 @@ if (logger.isLevelEnabled('debug')) {
 // https://hono.dev/docs/api/exception#handling-httpexceptions
 // oxlint-disable-next-line promise/prefer-await-to-callbacks
 app.onError((error, c) => {
-    if (error.name === 'ZodError') {
-        return createProblemDetails(
-            c,
-            unprocessableContent,
-            (error as ZodError).issues,
-        );
-    }
+  if (error instanceof NotFoundError) {
+    return c.notFound();
+  }
 
-    if (error instanceof UnauthorizedError) {
-        return createProblemDetails(c, unauthorized, error.message);
-    }
+  if (error.name === 'ZodError') {
+    return createProblemDetails(c, unprocessableContent, (error as ZodError).issues);
+  }
 
-    if (error instanceof ForbiddenError) {
-        return createProblemDetails(c, forbidden, error.message);
-    }
+  if (error instanceof EmailExistsError) {
+    return createProblemDetails(c, unprocessableContent, error.message);
+  }
 
-    if (error.message.includes('Versionskonflikt')) {
-        return createProblemDetails(c, preconditionFailed, error.message);
-    }
+  if (error instanceof VersionInvalidError || error instanceof VersionOutdatedError) {
+    return createProblemDetails(c, preconditionFailed, error.message);
+  }
 
-    logger.error('Interner Fehler: %o', error as object);
-    console.log(error.stack);
-    return c.body('Interner Fehler', 500);
+  if (error instanceof UnauthorizedError) {
+    return createProblemDetails(c, unauthorized, error.message);
+  }
+
+  if (error instanceof ForbiddenError) {
+    return createProblemDetails(c, forbidden, error.message);
+  }
+
+  logger.error('Interner Fehler: %o', error);
+  console.log(error.stack);
+  return c.body('Interner Fehler', 500);
 });

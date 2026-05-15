@@ -1,4 +1,5 @@
-// Copyright (C) 2026 - present Jeton Rama, Hochschule Karlsruhe
+// oxlint-disable no-magic-numbers
+// Copyright (C) 2026 - present Jeton Rama & Murat Yahsi, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,7 +25,7 @@ const MitgliedComplete = z.strictObject({
   geburtsdatum: z.coerce.date().optional(),
   telefonnummer: z.string().max(20).optional(),
   geschlecht: z.enum(['MAENNLICH', 'WEIBLICH', 'DIVERS']).optional(),
-  mitgliedsstatus: z.enum(['AKTIV', 'INAKTIV', 'GESPERRT']).optional(),
+  mitgliedsstatus: z.enum(['AKTIV', 'INAKTIV']).optional(),
   beitrittsdatum: z.coerce.date().optional(),
   interessen: z.array(z.string()).optional(),
 

@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/\>.
 
-import { MitgliedService } from '../service/mitglied-service.mts';
 import { type HonoRequest } from 'hono';
+import { MitgliedService } from '../service/mitglied-service.mts';
 
 export const createBaseUrl: (req: HonoRequest) => string = (req: HonoRequest) => {
   const { url } = req;

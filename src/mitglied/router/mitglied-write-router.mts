@@ -50,10 +50,12 @@ const logger = getLogger('mitglied-write-router', 'file');
 // N e u a n l e g e n
 // -----------------------------------------------------------------------------
 const mitgliedDtoToMitgliedCreateInput = (mitgliedDTO: MitgliedNeuType): MitgliedCreate => {
-  const ausleihen = mitgliedDTO.ausleihen?.map((ausleiheDTO) => {return {
-    ausleihdatum: ausleiheDTO.ausleihdatum,
-    rueckgabedatum: ausleiheDTO.rueckgabedatum,
-  }});
+  const ausleihen = mitgliedDTO.ausleihen?.map((ausleiheDTO) => {
+    return {
+      ausleihdatum: ausleiheDTO.ausleihdatum,
+      rueckgabedatum: ausleiheDTO.rueckgabedatum,
+    };
+  });
   const mitglied: MitgliedCreate = {
     version: 0,
     vorname: mitgliedDTO.vorname,
@@ -65,14 +67,16 @@ const mitgliedDtoToMitgliedCreateInput = (mitgliedDTO: MitgliedNeuType): Mitglie
     mitgliedsstatus: mitgliedDTO.mitgliedsstatus ?? null,
     beitrittsdatum: mitgliedDTO.beitrittsdatum ?? null,
     interessen: mitgliedDTO.interessen ?? [],
-    ausweis: mitgliedDTO.ausweis
+    ...(mitgliedDTO.ausweis
       ? {
-          create: {
-            ausstellungsdatum: mitgliedDTO.ausweis.ausstellungsdatum,
-            ablaufdatum: mitgliedDTO.ausweis.ablaufdatum,
+          ausweis: {
+            create: {
+              ausstellungsdatum: mitgliedDTO.ausweis.ausstellungsdatum,
+              ablaufdatum: mitgliedDTO.ausweis.ablaufdatum,
+            },
           },
         }
-      : undefined,
+      : {}),
     ausleihen: { create: ausleihen ?? [] },
   };
   return mitglied;
