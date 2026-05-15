@@ -21,8 +21,8 @@ import { MitgliedWriteService } from './mitglied/service/mitglied-write-service.
 const mitgliedService = new MitgliedService();
 
 export const container = {
-    mitgliedService,
-    mitgliedWriteService: new MitgliedWriteService(mitgliedService),
-    keycloakService: new KeycloakService(),
-    dbPopulateService: new DbPopulateService(),
+  mitgliedService,
+  mitgliedWriteService: new MitgliedWriteService(mitgliedService),
+  keycloakService: new KeycloakService(),
+  dbPopulateService: new DbPopulateService(),
 };

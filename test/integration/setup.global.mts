@@ -1,4 +1,4 @@
-// Copyright (C) 2026 - present Jeton Rama, Hochschule Karlsruhe
+// Copyright (C) 2026 - present Jeton Rama & Murat Yahsi, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -11,30 +11,31 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program. If not, see <https://www.gnu.org/licenses/\>.
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-// https://vitest.dev/config/\#globalsetup
+// https://vitest.dev/config/#globalsetup
 
-import axios from 'axios';
-import { AUTHORIZATION, BEARER, baseURL } from './constants.mjs';
+import { AUTHORIZATION, BEARER, POST, baseURL } from './constants.mjs';
 import { getToken } from './token.mjs';
 
 const dbPopulate = async (token: string) => {
   const url = `${baseURL}/dev/db_populate`;
+  const headers = new Headers();
+  headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
-  const response = await axios.post(url, undefined, {
-    headers: {
-      [AUTHORIZATION]: `${BEARER} ${token}`,
-    },
+  const response = await fetch(url, {
+    method: POST,
+    headers,
   });
 
-  if (response.data.db_populate !== 'ok') {
+  const { db_populate } = (await response.json()) as { db_populate: string };
+  if (db_populate !== 'ok') {
     throw new Error('Fehler bei POST /dev/db_populate');
   }
   console.log('DB wurde neu geladen');
 };
 
-// https://vitest.dev/config/\#globalsetup
+// https://vitest.dev/config/#globalsetup
 // oxlint-disable-next-line import/no-default-export
 export default async function setup() {
   const token = await getToken('admin', 'p');
