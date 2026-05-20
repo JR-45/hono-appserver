@@ -1,0 +1,11 @@
+name: mitglied
+variables:
+  - name: username
+    value: admin
+    disabled: true
+  - secret: true
+    name: password
+    disabled: true
+  - name: token
+    value: ""
+    disabled: true

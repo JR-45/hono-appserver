@@ -1,0 +1,67 @@
+opencollection: 1.0.0
+
+info:
+  name: mitglied
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+request:
+  auth:
+    type: oauth2
+    flow: resource_owner_password_credentials
+    accessTokenUrl: "{{oidcTokenUrl}}"
+    credentials:
+      clientId: "{{clientID}}"
+      clientSecret: "{{clientSecret}}"
+      placement: body
+    resourceOwner:
+      username: "{{username}}"
+      password: "{{password}}"
+    tokenConfig:
+      id: credentials
+      placement:
+        header: Bearer
+      source: access_token
+    settings:
+      autoFetchToken: true
+      autoRefreshToken: false
+  variables:
+    - name: baseUrl
+      value: https://localhost:3000
+    - name: keycloakUrl
+      value: https://localhost:8843
+    - name: realm
+      value: javascript
+    - name: realmUrl
+      value: "{{keycloakUrl}}/realms/{{realm}}"
+    - name: oidcUrl
+      value: "{{realmUrl}}/protocol/openid-connect"
+    - name: oidcTokenUrl
+      value: "{{oidcUrl}}/token"
+    - name: authUrl
+      value: "{{baseUrl}}/auth"
+    - name: tokenUrl
+      value: "{{authUrl}}/token"
+    - name: clientID
+      value: javascript-client
+    - name: clientSecret
+      value: DsMqqVqSLudj9JrnYKJZCpbosHRTwOg8
+    - name: password
+      value: p
+    - name: username
+      value: admin
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git

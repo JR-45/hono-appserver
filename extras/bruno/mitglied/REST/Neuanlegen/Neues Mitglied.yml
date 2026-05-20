@@ -1,0 +1,50 @@
+info:
+  name: Neues Mitglied
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "vorname": "Max",
+        "nachname": "Mustermann",
+        "email": "max.mustermann@example.com",
+        "geburtsdatum": "1990-01-15",
+        "telefonnummer": "0721-123456",
+        "geschlecht": "MAENNLICH",
+        "mitgliedsstatus": "AKTIV",
+        "beitrittsdatum": "2024-03-01",
+        "interessen": ["Lesen", "Sport"],
+        "ausweis": {
+          "ausstellungsdatum": "2024-01-01",
+          "ablaufdatum": "2029-01-01"
+        }
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.headers.location
+      operator: matches
+      value: /rest\/[1-9]\d*$
+    - expression: res.body
+      operator: isString
+    - expression: res.body
+      operator: isEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

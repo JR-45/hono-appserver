@@ -1,0 +1,45 @@
+info:
+  name: Mitglied 1 ändern
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{restUrl}}/:id"
+  headers:
+    - name: If-Match
+      value: '"0"'
+  params:
+    - name: id
+      value: "1"
+      type: path
+  body:
+    type: json
+    data: |
+      {
+        "vorname": "Admin",
+        "nachname": "User",
+        "email": "admin@acme.com",
+        "telefonnummer": "0721-999999",
+        "geschlecht": "MAENNLICH",
+        "mitgliedsstatus": "AKTIV",
+        "beitrittsdatum": "2024-01-01",
+        "interessen": ["Sport"]
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "204"
+    - expression: res.body
+      operator: isString
+    - expression: res.body
+      operator: isEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
