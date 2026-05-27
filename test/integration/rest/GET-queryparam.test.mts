@@ -10,7 +10,7 @@ import axios from 'axios';
 // -----------------------------------------------------------------------------
 const nachnameArray = ['A', 'M', 'S'];
 const nachnameNichtVorhanden = ['xxx', 'yyy', 'zzz'];
-const emails = ['alpha@acme.com'];
+const emails = ['admin@acme.com'];
 
 // -----------------------------------------------------------------------------
 // T e s t s

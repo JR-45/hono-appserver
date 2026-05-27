@@ -38,6 +38,7 @@ import { createMiddleware } from 'hono/factory';
 import { router as devRouter } from './config/dev/dev-router.mts';
 import { env } from './config/env.mts';
 import { getLogger } from './logger/logger.mts';
+import { graphqlApp } from './mitglied/graphql/graphql-app.mts';
 import { router as mitgliedRouter } from './mitglied/router/mitglied-router.mts';
 import { router as mitgliedWriteRouter } from './mitglied/router/mitglied-write-router.mts';
 import { paths } from './config/paths.mts';
@@ -79,6 +80,7 @@ if (logger.isLevelEnabled('debug')) {
 app.route(paths.rest, mitgliedRouter);
 app.route(paths.rest, mitgliedWriteRouter);
 app.route(paths.auth, authRouter);
+app.route('/', graphqlApp);
 
 const { NODE_ENV } = env;
 if (NODE_ENV === 'development' || NODE_ENV === 'test') {

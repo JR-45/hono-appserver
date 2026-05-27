@@ -52,7 +52,7 @@ const neuesMitgliedEmailExistiert: Omit<MitgliedNeuType, 'geburtsdatum' | 'beitr
 } = {
     vorname: 'Duplikat',
     nachname: 'Email',
-    email: 'alpha@acme.com',
+    email: 'admin@acme.com',
     geburtsdatum: '1990-01-01',
     telefonnummer: '+49 721 9999999',
     geschlecht: 'WEIBLICH',
