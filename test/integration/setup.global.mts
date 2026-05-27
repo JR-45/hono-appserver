@@ -15,8 +15,8 @@
 
 // https://vitest.dev/config/#globalsetup
 
-import { AUTHORIZATION, BEARER, POST, baseURL } from './constants.mjs';
-import { getToken } from './token.mjs';
+import { AUTHORIZATION, BEARER, POST, baseURL } from './constants.mts';
+import { getToken } from './token.mts';
 
 const dbPopulate = async (token: string) => {
   const url = `${baseURL}/dev/db_populate`;
