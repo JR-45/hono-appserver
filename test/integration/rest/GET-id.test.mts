@@ -65,12 +65,16 @@ describe('GET /rest/:id', () => {
         async (id) => {
             // given
             const url = `${restURL}/${id}`;
+            const { data: firstData } = await axios.get(url, {
+                headers: { Accept: 'application/json' },
+            });
+            const etag = `"${firstData.version}"`;
 
             // when
             const { status, data } = await axios.get(url, {
                 headers: {
                     Accept: 'application/json',
-                    [IF_NONE_MATCH]: '"0"',
+                    [IF_NONE_MATCH]: etag,
                 },
                 validateStatus: () => true,
             });

@@ -28,6 +28,14 @@ const dbPopulate = async (token: string) => {
     headers,
   });
 
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(
+      `POST /dev/db_populate fehlgeschlagen (HTTP ${response.status}): ${body.slice(0, 120)}\n` +
+        'Tipp: Server muss mit NODE_ENV=development oder NODE_ENV=test gestartet werden (bun run dev).',
+    );
+  }
+
   const { db_populate } = (await response.json()) as { db_populate: string };
   if (db_populate !== 'ok') {
     throw new Error('Fehler bei POST /dev/db_populate');

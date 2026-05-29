@@ -27,7 +27,7 @@ const geaendertesMitglied = {
     beitrittsdatum: '2025-01-01',
     interessen: ['SPORT'],
 };
-const idVorhanden = '30';
+const idVorhanden = '40';
 
 const geaendertesMitgliedIdNichtVorhanden = {
     vorname: 'Nicht',
@@ -147,7 +147,7 @@ describe('PUT /rest/:id', () => {
         const { status, data } = await axios.put(url, veraltesMitglied, {
             headers: {
                 [CONTENT_TYPE]: APPLICATION_JSON,
-                [IF_MATCH]: '"999"',
+                [IF_MATCH]: '"0"',
                 [AUTHORIZATION]: `${BEARER} ${token}`,
             },
             validateStatus: () => true,
