@@ -35,7 +35,7 @@
   "type": "module",
   "scripts": {
     "start": "bun src/index.mts",
-    "test": "vitest",
+    "test": "NODE_TLS_REJECT_UNAUTHORIZED=0 vitest",
     "asciidoctor": "node scripts/asciidoctor.mts",
     "dev": "bun --watch src/index.mts",
     "hello": "bun --watch src/index-hello.mts",
