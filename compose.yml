@@ -1,0 +1,23 @@
+services:
+  alpine:
+    image: alpine:latest
+    command: ["sh", "-c", "echo 'Alpine ist gestartet' && tail -f /dev/null"]
+    networks: [multi-os-network]
+    container_name: alpine-container
+
+  trixie:
+    image: debian:trixie-slim
+    command: ["sh", "-c", "echo 'Debian Trixie ist gestartet' && tail -f /dev/null"]
+    networks: [multi-os-network]
+    container_name: trixie-container
+
+  chainguard:
+    # Wir nutzen hier das wolfi-base Image von Chainguard als Standard
+    image: cgr.dev/chainguard/wolfi-base:latest
+    command: ["sh", "-c", "echo 'Chainguard ist gestartet' && tail -f /dev/null"]
+    networks: [multi-os-network]
+    container_name: chainguard-container
+
+networks:
+  multi-os-network:
+    name: multi-os-network
