@@ -1,0 +1,52 @@
+info:
+  name: Mitglied mit ID 20 aktualisieren
+  type: graphql
+  seq: 2
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      mutation {
+        update(
+          input: {
+            id: "20",
+            version: 0,
+            vorname: "Rudolf",
+            nachname: "Abel",
+            email: "rudolf.abel@kgb.su",
+            geburtsdatum: "1903-07-11",
+            telefonnummer: "+7 495 5551962",
+            geschlecht: MAENNLICH,
+            mitgliedsstatus: AKTIV,
+            interessen: ["SACHBUCH", "BIOGRAFIE"]
+          }
+        ) {
+          version
+        }
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.update.version
+      operator: isNumber
+    - expression: res.body.data.update.version
+      operator: gte
+      value: "0"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

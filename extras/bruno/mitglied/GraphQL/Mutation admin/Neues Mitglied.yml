@@ -1,0 +1,62 @@
+info:
+  name: Neues Mitglied
+  type: graphql
+  seq: 1
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      mutation {
+        create(
+          input: {
+            vorname: "Francis Gary",
+            nachname: "Powers",
+            email: "gary.powers@cia.gov",
+            geburtsdatum: "1929-08-17",
+            telefonnummer: "+1 202 5551960",
+            geschlecht: MAENNLICH,
+            mitgliedsstatus: AKTIV,
+            beitrittsdatum: "2026-01-01",
+            interessen: ["SACHBUCH", "BIOGRAFIE"],
+            ausweis: {
+              ausstellungsdatum: "2026-01-01",
+              ablaufdatum: "2028-01-01"
+            }
+          }
+        ) {
+          id
+        }
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit id', () => {
+          const { data } = res.getBody();
+          const id = parseInt(data.create.id, 10);
+          expect(id).to.be.gte(0);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.create
+      operator: isJson
+    - expression: res.body.data.create.id
+      operator: isString
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

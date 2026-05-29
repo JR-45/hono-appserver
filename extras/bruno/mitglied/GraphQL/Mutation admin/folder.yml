@@ -1,0 +1,13 @@
+info:
+  name: Mutation admin
+  type: folder
+  seq: 2
+
+request:
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+docs:
+  content: Neuanlegen, Ändern und Löschen mit der GraphQL-Schnittstelle
+  type: text/markdown

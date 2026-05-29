@@ -1,0 +1,61 @@
+info:
+  name: Suche alle Mitglieder
+  type: graphql
+  seq: 2
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      {
+        mitglieder {
+          id
+          version
+          vorname
+          nachname
+          email
+          geschlecht
+          mitgliedsstatus
+        }
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit den Properties', () => {
+          res.getBody()
+            .data
+            .mitglieder
+            .forEach(m => {
+              const { id, version, vorname, nachname, email } = m;
+              expect(id).to.be.a('string');
+              expect(parseInt(id)).to.be.gte(0);
+              expect(version).to.be.a('number').that.is.gte(0);
+              expect(vorname).to.be.a('string');
+              expect(nachname).to.be.a('string');
+              expect(email).to.be.a('string');
+            });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.mitglieder
+      operator: isArray
+    - expression: res.body.data.mitglieder
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

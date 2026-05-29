@@ -1,0 +1,55 @@
+info:
+  name: Suche Mitglieder mit Nachname Powers
+  type: graphql
+  seq: 3
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      query ($nachname: String = "Powers") {
+        mitglieder(input: { nachname: $nachname }) {
+          id
+          vorname
+          nachname
+          email
+        }
+      }
+    variables: |-
+      {
+        "nachname": "Powers"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit nachname', () => {
+          res.getBody()
+            .data
+            .mitglieder
+            .map(m => m.nachname)
+            .forEach(n => expect(n.toLowerCase()).to.include('powers'));
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.mitglieder
+      operator: isArray
+    - expression: res.body.data.mitglieder
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
