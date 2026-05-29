@@ -42,6 +42,8 @@ import { graphqlApp } from './mitglied/graphql/graphql-app.mts';
 import { router as mitgliedRouter } from './mitglied/router/mitglied-router.mts';
 import { router as mitgliedWriteRouter } from './mitglied/router/mitglied-write-router.mts';
 import { paths } from './config/paths.mts';
+import { router as prometheusRouter } from './monitoring/prometheus-router.mts';
+import { trackMetrics } from './monitoring/prometheus-metrics.mts';
 import { requestLogger } from './logger/request-logger.mts';
 import { responseTime } from './logger/response-time.mts';
 import { secureHeaders } from 'hono/secure-headers';
@@ -68,7 +70,7 @@ const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
 // https://hono.dev/docs/middleware/builtin/secure-headers
 // https://hono.dev/docs/middleware/builtin/cors
 // https://hono.dev/docs/middleware/builtin/compress
-app.use(secureHeaders(), cors(corsOptions), securityHeaders, compress());
+app.use(secureHeaders(), cors(corsOptions), securityHeaders, compress(), trackMetrics);
 
 if (logger.isLevelEnabled('debug')) {
   app.use(responseTime, requestLogger);
@@ -81,6 +83,8 @@ app.route(paths.rest, mitgliedRouter);
 app.route(paths.rest, mitgliedWriteRouter);
 app.route(paths.auth, authRouter);
 app.route('/', graphqlApp);
+
+app.route('/prometheus', prometheusRouter);
 
 const { NODE_ENV } = env;
 if (NODE_ENV === 'development' || NODE_ENV === 'test') {

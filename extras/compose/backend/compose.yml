@@ -23,4 +23,6 @@
 include:
   - path: ../postgres/compose.yml
   - path: ../keycloak/compose.yml
+  - path: ../prometheus-grafana/compose.yml
+  - path: ../sonarqube/compose.yml
 #  - path: ../mailpit/compose.yml

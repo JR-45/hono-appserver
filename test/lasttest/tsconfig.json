@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "script.ts",
+    "../../src/mitglied/router/mitglied-validation.mts"
+  ],
+  "compilerOptions": {
+    "isolatedModules": true,
+    "lib": ["ES2024", "dom"]
+  }
+}
