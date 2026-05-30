@@ -9,7 +9,7 @@ KC_URL="${KEYCLOAK_URL:-http://localhost:8080}"
 CLIENT_SECRET="${CLIENT_SECRET:-dg72WHaMP2GB4sZVhk6ExJDP3rH4tYjz}"
 
 echo "Warte auf Keycloak unter $KC_URL ..."
-until curl -fs "$KC_URL/health/ready" > /dev/null 2>&1; do
+until curl -fs "$KC_URL/realms/master" > /dev/null 2>&1; do
   sleep 3
 done
 echo "Keycloak ist bereit."
