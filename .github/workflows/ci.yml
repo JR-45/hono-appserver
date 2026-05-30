@@ -18,6 +18,8 @@ jobs:
       KEYCLOAK_HOST: localhost
       KEYCLOAK_PORT: "8080"
       NODE_ENV: test
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
     steps:
       - uses: actions/checkout@v4
@@ -91,9 +93,6 @@ jobs:
           [ -f server.pid ] && kill "$(cat server.pid)" 2>/dev/null || true
 
       - name: SonarQube Scan
-        if: ${{ secrets.SONAR_TOKEN != '' }}
+        if: ${{ env.SONAR_TOKEN != '' }}
         uses: SonarSource/sonarqube-scan-action@v6
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         continue-on-error: true
