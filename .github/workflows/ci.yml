@@ -91,7 +91,8 @@ jobs:
           [ -f server.pid ] && kill "$(cat server.pid)" 2>/dev/null || true
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
+        if: ${{ secrets.SONAR_TOKEN != '' }}
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
