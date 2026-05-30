@@ -14,8 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/\>.
 
 import {
-    type MitgliedType,
     type ID,
+    type MitgliedType,
     type SuchParameterInput,
     toMitgliedType,
     toSuchparameter,
@@ -97,8 +97,8 @@ export const mitgliederHandler = async (
         });
     }
     logger.debug('mitgliederHandler: mitgliederSlice=%o', mitgliederSlice);
-    const result = mitgliederSlice.content.map((m) =>
-        toMitgliedType(m as MitgliedMitAusweisUndAusleihen),
+    const result = mitgliederSlice.content.map((mitglied) =>
+        toMitgliedType(mitglied as MitgliedMitAusweisUndAusleihen),
     );
     logger.debug('mitgliederHandler: result=%o', result);
     return result;

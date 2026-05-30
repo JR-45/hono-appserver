@@ -303,10 +303,12 @@ export const toCreate = (mitglied: MitgliedNeuInput): MitgliedCreate => {
               }
             : {}),
         ausleihen: {
-            create: (ausleihen ?? []).map((a) => ({
-                ausleihdatum: new Date(a.ausleihdatum),
-                rueckgabedatum: new Date(a.rueckgabedatum),
-            })),
+        create: (ausleihen ?? []).map((ausleiheItem) => {
+            return {
+                ausleihdatum: new Date(ausleiheItem.ausleihdatum),
+                rueckgabedatum: new Date(ausleiheItem.rueckgabedatum),
+            };
+        }),
         },
     };
     return mitgliedCreate;

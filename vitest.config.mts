@@ -6,7 +6,7 @@ import process from 'node:process';
 // selbst-signiertes Zertifikat
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
-export default defineConfig({
+export default defineConfig({ // oxlint-disable-line import/no-default-export
     test: {
         env: {
             NODE_TLS_REJECT_UNAUTHORIZED: '0',

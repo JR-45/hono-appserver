@@ -14,13 +14,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/\>.
 
 import {
+    type ID,
     type MitgliedNeuInput,
     type MitgliedUpdateInput,
-    type ID,
     type SuchParameterInput,
     typeDefs,
 } from './types.mts';
-import { mitgliedHandler, mitgliederHandler } from './query-handler.mts';
 import {
     createHandler,
     deleteHandler,
@@ -28,6 +27,7 @@ import {
     updateHandler,
 } from './mutation-handler.mts';
 import { createSchema, createYoga } from 'graphql-yoga';
+import { mitgliedHandler, mitgliederHandler } from './query-handler.mts';
 import { Hono } from 'hono';
 import { getLogger } from '../../logger/logger.mts';
 import { rolesRequired } from './roles-required.mts';

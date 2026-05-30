@@ -1,4 +1,4 @@
-// oxlint-disable max-lines-per-function, no-magic-numbers
+// oxlint-disable max-lines-per-function
 // Copyright (C) 2026 - present Jeton Rama, Hochschule Karlsruhe
 
 import { CONTENT_TYPE, restURL } from '../constants.mts';
@@ -27,7 +27,7 @@ describe('GET /rest', () => {
         expect(headers[CONTENT_TYPE.toLowerCase()]).toMatch(/json/iu);
 
         data.content
-            .map((m: any) => m.id)
+            .map((mitglied: any) => mitglied.id)
             .forEach((id: number) => {
                 expect(id).toBeDefined();
             });
@@ -50,9 +50,9 @@ describe('GET /rest', () => {
             expect(headers[CONTENT_TYPE.toLowerCase()]).toMatch(/json/iu);
 
             data.content
-                .map((m: any) => m.nachname)
-                .forEach((n: string) =>
-                    expect(n?.toLowerCase()).toStrictEqual(
+                .map((mitglied: any) => mitglied.nachname)
+                .forEach((nachnameValue: string) =>
+                    expect(nachnameValue?.toLowerCase()).toStrictEqual(
                         expect.stringContaining(nachname.toLowerCase()),
                     ),
                 );

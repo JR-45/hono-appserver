@@ -32,7 +32,8 @@ const getToken = (headers: Headers) => {
             },
         });
     }
-    const token = auth.slice(7);
+    const BEARER_PREFIX_LENGTH = 7;
+    const token = auth.slice(BEARER_PREFIX_LENGTH);
     logger.debug('getToken: token=%s', token);
     return token;
 };

@@ -1,4 +1,3 @@
-// oxlint-disable max-lines
 // oxlint-disable func-style
 // oxlint-disable no-magic-numbers
 // Copyright (C) 2026 - present Jeton Rama, Hochschule Karlsruhe

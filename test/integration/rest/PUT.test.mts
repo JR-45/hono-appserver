@@ -10,8 +10,8 @@ import {
     restURL,
 } from '../constants.mts';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { getToken } from '../token.mts';
 import axios from 'axios';
+import { getToken } from '../token.mts';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n

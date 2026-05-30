@@ -239,12 +239,12 @@ describe('GraphQL Queries', () => {
 
         expect(mitglieder).not.toHaveLength(0);
 
-        mitglieder.forEach((m) => {
-            expect(parseInt(m.id!, 10)).toBeGreaterThan(0);
-            expect(m.version).toBeGreaterThan(-1);
-            expect(m.vorname).toMatch(/^\w/u);
-            expect(m.nachname).toMatch(/^\w/u);
-            expect(m.email).toMatch(/.+@.+/u);
+        mitglieder.forEach((mitglied) => {
+            expect(parseInt(mitglied.id!, 10)).toBeGreaterThan(0);
+            expect(mitglied.version).toBeGreaterThan(-1);
+            expect(mitglied.vorname).toMatch(/^\w/u);
+            expect(mitglied.nachname).toMatch(/^\w/u);
+            expect(mitglied.email).toMatch(/.+@.+/u);
         });
     });
 
@@ -280,9 +280,9 @@ describe('GraphQL Queries', () => {
             expect(data.mitglieder).not.toHaveLength(0);
 
             data.mitglieder
-                .map((m) => m.nachname)
-                .forEach((n) =>
-                    expect(n.toLowerCase()).toStrictEqual(
+                .map((mitglied) => mitglied.nachname)
+                .forEach((nachnameValue) =>
+                    expect(nachnameValue.toLowerCase()).toStrictEqual(
                         expect.stringContaining(nachname.toLowerCase()),
                     ),
                 );
@@ -388,8 +388,8 @@ describe('GraphQL Queries', () => {
         expect(errors).toBeUndefined();
         expect(data.mitglieder).not.toHaveLength(0);
 
-        data.mitglieder.forEach((m) =>
-            expect(m.geschlecht).toBe('MAENNLICH'),
+        data.mitglieder.forEach((mitglied) =>
+            expect(mitglied.geschlecht).toBe('MAENNLICH'),
         );
     });
 

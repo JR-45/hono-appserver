@@ -14,11 +14,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/\>.
 
 import {
-    type MitgliedNeuInput,
-    type MitgliedUpdateInput,
     type CreatePayload,
     type DeletePayload,
     type ID,
+    type MitgliedNeuInput,
+    type MitgliedUpdateInput,
     type UpdatePayload,
     toCreate,
     toID,
@@ -26,12 +26,12 @@ import {
     toNumber,
     toUpdate,
 } from './types.mts';
+import { EmailExistsError, NotFoundError } from '../service/errors.mts';
 import {
     MitgliedNeuSchema,
     MitgliedUpdateGraphQLSchema,
 } from '../router/mitglied-validation.mts';
 import { GraphQLError } from 'graphql';
-import { EmailExistsError, NotFoundError } from '../service/errors.mts';
 import { container } from '../../container.mts';
 import { getLogger } from '../../logger/logger.mts';
 

@@ -43,11 +43,11 @@ import { router as mitgliedRouter } from './mitglied/router/mitglied-router.mts'
 import { router as mitgliedWriteRouter } from './mitglied/router/mitglied-write-router.mts';
 import { paths } from './config/paths.mts';
 import { router as prometheusRouter } from './monitoring/prometheus-router.mts';
-import { trackMetrics } from './monitoring/prometheus-metrics.mts';
 import { requestLogger } from './logger/request-logger.mts';
 import { responseTime } from './logger/response-time.mts';
 import { secureHeaders } from 'hono/secure-headers';
 import { showRoutes } from 'hono/dev';
+import { trackMetrics } from './monitoring/prometheus-metrics.mts';
 
 export const app = new Hono();
 

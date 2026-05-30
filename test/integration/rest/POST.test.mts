@@ -12,8 +12,8 @@ import {
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type MitgliedNeuType } from '../../../src/mitglied/router/mitglied-validation.mts';
 import { MitgliedService } from '../../../src/mitglied/service/mitglied-service.mts';
-import { getToken } from '../token.mts';
 import axios from 'axios';
+import { getToken } from '../token.mts';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -32,8 +32,8 @@ const neuesMitglied: Omit<MitgliedNeuType, 'geburtsdatum' | 'beitrittsdatum'> & 
     beitrittsdatum: '2026-01-01',
     interessen: ['SPORT', 'LESEN'],
     ausweis: {
-        ausstellungsdatum: '2026-01-01',
-        ablaufdatum: '2028-01-01',
+        ausstellungsdatum: new Date('2026-01-01'),
+        ablaufdatum: new Date('2028-01-01'),
     },
     ausleihen: [],
 };
