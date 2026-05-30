@@ -10,32 +10,49 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:17
-        env:
-          POSTGRES_USER: mitglied
-          POSTGRES_PASSWORD: p
-          POSTGRES_DB: mitglied
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     env:
       DATABASE_URL: postgresql://mitglied:p@localhost:5432/mitglied?schema=mitglied
+      DATABASE_URL_ADMIN: postgresql://mitglied:p@localhost:5432/mitglied?schema=mitglied
+      CLIENT_SECRET: dg72WHaMP2GB4sZVhk6ExJDP3rH4tYjz
+      KEYCLOAK_SCHEMA: http
+      KEYCLOAK_HOST: localhost
+      KEYCLOAK_PORT: "8080"
+      NODE_ENV: test
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
+      # PostgreSQL als Docker-Container starten, damit die CSV-Dateien per Volume
+      # eingebunden werden können (server-seitiges COPY FROM benötigt die Dateien
+      # im PostgreSQL-Container-Dateisystem)
+      - name: Start PostgreSQL
+        run: |
+          docker run -d --name postgres \
+            -p 5432:5432 \
+            -e POSTGRES_USER=mitglied \
+            -e POSTGRES_PASSWORD=p \
+            -e POSTGRES_DB=mitglied \
+            -v "${{ github.workspace }}/extras/compose/postgres/init/mitglied/csv:/init/mitglied/csv:ro" \
+            postgres:17
+          until docker exec postgres pg_isready -U mitglied; do sleep 2; done
+
+      - name: Setup DB Schema
+        run: |
+          PGPASSWORD=p psql -h localhost -U mitglied -d mitglied \
+            -c "CREATE SCHEMA IF NOT EXISTS AUTHORIZATION mitglied;" \
+            -c "ALTER ROLE mitglied SET search_path = 'mitglied';"
+
+      # Keycloak im Development-Modus starten (kein TLS, Port 8080)
+      - name: Start Keycloak
+        run: |
+          docker run -d --name keycloak \
+            -p 8080:8080 \
+            -e KEYCLOAK_ADMIN=admin \
+            -e KEYCLOAK_ADMIN_PASSWORD=admin \
+            quay.io/keycloak/keycloak:latest \
+            start-dev
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -49,8 +66,29 @@ jobs:
       - name: Lint
         run: bun run lint
 
+      # Keycloak-Realm konfigurieren (wartet intern auf Keycloak-Bereitschaft)
+      - name: Configure Keycloak Realm
+        run: bash extras/keycloak/setup-realm.sh
+
+      # Server im Hintergrund starten
+      - name: Start Server
+        run: |
+          nohup bun src/index.mts > server.log 2>&1 &
+          echo $! > server.pid
+          timeout 60 bash -c \
+            'until curl -kfs https://localhost:3000/health > /dev/null 2>&1; do sleep 2; done'
+
       - name: Test
         run: bun run test
+
+      - name: Show Server Log
+        if: failure()
+        run: cat server.log 2>/dev/null || true
+
+      - name: Stop Server
+        if: always()
+        run: |
+          [ -f server.pid ] && kill "$(cat server.pid)" 2>/dev/null || true
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5

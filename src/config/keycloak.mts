@@ -42,9 +42,12 @@ if (typeof keycloak === 'object') {
   }
 }
 
-const schema = (keycloak?.schema as string | undefined) ?? 'https';
-const host = (keycloak?.host as string | undefined) ?? 'keycloak';
-const port = (keycloak?.port as number | undefined) ?? 8443; // oxlint-disable-line no-magic-numbers
+const { CLIENT_SECRET, NODE_ENV, KEYCLOAK_SCHEMA, KEYCLOAK_HOST, KEYCLOAK_PORT } = env;
+
+const schema = KEYCLOAK_SCHEMA ?? (keycloak?.schema as string | undefined) ?? 'https';
+const host = KEYCLOAK_HOST ?? (keycloak?.host as string | undefined) ?? 'keycloak';
+const portFromToml = (keycloak?.port as number | undefined) ?? 8443; // oxlint-disable-line no-magic-numbers
+const port = KEYCLOAK_PORT === undefined ? portFromToml : Number(KEYCLOAK_PORT);
 const authServerUrl = `${schema}://${host}:${port}`;
 // Keycloak ist in Sicherheits-Bereiche (= realms) unterteilt
 const realm = (keycloak?.realm as string | undefined) ?? 'javascript';
@@ -56,8 +59,6 @@ const audience = ['account'];
 
 // fuer KeycloakService
 const accessTokenUrl = `${oidcUrl}/token`;
-
-const { CLIENT_SECRET, NODE_ENV } = env;
 
 export const keycloakConfig = {
   realm,
