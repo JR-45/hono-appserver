@@ -1,0 +1,18 @@
+{
+	"ulid": "01KTP5PSYRAE2PERKGWDHNM35S",
+	"minTime": 1780095461996,
+	"maxTime": 1780099200000,
+	"stats": {
+		"numSamples": 58913,
+		"numFloatSamples": 58913,
+		"numSeries": 233,
+		"numChunks": 527
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01KTP5PSYRAE2PERKGWDHNM35S"
+		]
+	},
+	"version": 1
+}

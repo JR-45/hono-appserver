@@ -31,6 +31,7 @@ export const responseTime = createMiddleware(async (c: Context, next: Next) => {
   // https://bugs.webkit.org/show_bug.cgi?id=223166
   // https://github.com/oven-sh/bun/issues/15853
   const start = Date.now();
+  // eslint-disable-next-line node/callback-return
   await next();
   const duration = Date.now() - start;
   logger.debug('Response time: %d ms, %d', duration, c.res.status);

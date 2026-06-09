@@ -5,6 +5,7 @@
     "../../src/mitglied/router/mitglied-validation.mts"
   ],
   "compilerOptions": {
+    "rootDir": "../..",
     "isolatedModules": true,
     "lib": ["ES2024", "dom"]
   }

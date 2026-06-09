@@ -39,6 +39,7 @@ export const trackMetrics = createMiddleware(async (c: Context, next: Next) => {
     const start = Date.now();
     const { path, method } = c.req;
 
+    // eslint-disable-next-line node/callback-return
     await next();
 
     const { res } = c;
